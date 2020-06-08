@@ -1,3 +1,4 @@
+
 const App = (props) => {
   const [userJob, setUserJob] = React.useState([]);
   const [valueCount, setValueCount] = React.useState(0);
@@ -21,19 +22,25 @@ const App = (props) => {
 
   React.useEffect(() => {
     if (ws) ws.close();
-    // ${window.location.host}
-    const wsl = new WebSocket(`ws://127.0.0.1:6789`);
 
-    console.log("WS:", wsl)
+    try {
+      // ${window.location.host}
+      const wsl = new WebSocket(`ws://localhost:6789`);
 
-    if (wsl) {
-      wsl.addEventListener("message", onReceiveMessage);
-      setWs(wsl)
+      console.log("WS:", wsl)
+
+      if (wsl) {
+        wsl.addEventListener("message", onReceiveMessage);
+        setWs(wsl)
+      }
+
+      return () => {
+        wsl.removeEventListener("message", onReceiveMessage);
+      };
     }
-
-    return () => {
-      wsl.removeEventListener("message", onReceiveMessage);
-    };
+    catch(err) {
+      alert(err.message);
+    }
   }, []);
 
   const doMinus = (e) => {
@@ -50,6 +57,7 @@ const App = (props) => {
 
   return (
     <div>
+      <List/>
       <div className="buttons">
         <button className="minus button" onClick={doMinus}>-</button>
         <div className="value">{valueCount}</div>

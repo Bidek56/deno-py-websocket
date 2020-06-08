@@ -30,7 +30,7 @@ app.use(router.routes());
 app.use(router.allowedMethods());
 app.use(async (ctx) => {
   await send(ctx, ctx.request.url.pathname, {
-    root: `${Deno.cwd()}/public`,
+    root: `${Deno.cwd()}`,
     index: "index.html",
   });
 });
