@@ -1,7 +1,7 @@
 import { Application, Router, send } from "https://deno.land/x/oak/mod.ts";
 
-const app = new Application();
-const router = new Router();
+const app: Application = new Application();
+const router: Router = new Router();
 
 // const jobby = [
 //   {

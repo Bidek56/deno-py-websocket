@@ -4,6 +4,9 @@ const App = (props) => {
   const [valueCount, setValueCount] = React.useState(0);
   const [userCount, setUserCount] = React.useState(0);
 
+  const [user, setUser] = React.useState("admin")
+  const [cookies, , removeCookie] = ReactCookie.useCookies(['token']);
+
   const [ws, setWs] = React.useState(null);
 
   const onReceiveMessage = ({ data }) => {
@@ -56,17 +59,23 @@ const App = (props) => {
   };
 
   return (
-    <div>
-      <List/>
-      <div className="buttons">
-        <button className="minus button" onClick={doMinus}>-</button>
-        <div className="value">{valueCount}</div>
-        <button className="plus button" onClick={doPlus}>+</button>
-      </div>
-      <div className="state">
-        <span className="users">{userCount}</span> user online
-      </div>
-    </div>
+    <ReactCookie.CookiesProvider>
+      <React.Fragment>
+        {user || (cookies && cookies.token) ?
+          <div>
+            <div className="buttons">
+              <button className="minus button" onClick={doMinus}>-</button>
+              <div className="value">{valueCount}</div>
+              <button className="plus button" onClick={doPlus}>+</button>
+            </div>
+            <div className="state">
+              <span className="users">{userCount}</span> user online
+            </div>
+            <NewTask />
+          </div>
+          : <div>Login</div> }
+      </React.Fragment>
+    </ReactCookie.CookiesProvider>
   );
 };
 

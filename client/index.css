@@ -54,3 +54,9 @@ body {
 .state {
   font-size: 2em;
 }
+
+labelRoot {
+  margin-left: 0;
+  margin-right: 0;
+  font-size: 18;
+}
