@@ -9,13 +9,13 @@ Read the articles to learn more about it.
 # Run Project
 
 ```
-$ deno run --allow-net --allow-read server.ts
+$ deno run -c tsconfig.json --allow-net --allow-read server.tsx
 ```
 
 # If Prefer hot reload
 
 ```
-$ denon run server.ts
+$ denon start
 ```
 
 # MakeFile Script

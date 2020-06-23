@@ -2,12 +2,12 @@
   "$schema": "https://deno.land/x/denon/schema.json",
   "scripts": {
     "start": {
-      "cmd": "server.ts",
+      "cmd": "deno run server.tsx",
       "desc": "Run the main server.",
       "allow": [
         "env",
         "net",
-        "write"
+        "read"
       ],
       "unstable": true,
       "tsconfig": "tsconfig.json"
@@ -24,8 +24,8 @@
       "html"
     ],
     "match": [
-      "*.*",
-      "public/*"
+      "src/*",
+      "*.*"
     ],
     "skip": [
       "*/.git/*"
