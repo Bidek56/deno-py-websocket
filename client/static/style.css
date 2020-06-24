@@ -10,7 +10,6 @@
 
 .img {
     width: 200px;
-
 }
 
 body {
@@ -45,6 +44,11 @@ body {
 
 .plus {
   color: green;
+}
+
+.submit {
+  color: blue;
+  border: solid;
 }
 
 .value {

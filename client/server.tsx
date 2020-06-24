@@ -9,6 +9,7 @@ import {
 
 import App from './src/App.tsx';
 import Main from './src/Main.tsx'
+import NewTask from './src/NewTask.tsx'
 
 const server = new Application();
 const router = new Router();
@@ -24,6 +25,7 @@ const js =
 
    const App = ${App};
    const Main = ${Main};
+   const NewTask = ${NewTask}
    ReactDOM.hydrate(React.createElement(App), document.getElementById('react-app'));`;
 
 

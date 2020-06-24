@@ -16,6 +16,6 @@
         "noImplicitReturns": false
     },
     "include": [
-        "client"
+        "src"
     ]
 }
