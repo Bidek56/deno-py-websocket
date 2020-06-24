@@ -10,6 +10,7 @@ import {
 import App from './src/App.tsx';
 import Main from './src/Main.tsx'
 import NewTask from './src/NewTask.tsx'
+import NavBar from './src/NavBar.tsx'
 
 const server = new Application();
 const router = new Router();
@@ -26,6 +27,7 @@ const js =
    const App = ${App};
    const Main = ${Main};
    const NewTask = ${NewTask}
+   const NavBar = ${NavBar}
    ReactDOM.hydrate(React.createElement(App), document.getElementById('react-app'));`;
 
 
@@ -35,6 +37,7 @@ const html =
     <head> 
       <meta charset="UTF-8" />
       <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <link rel="shortcut icon" href="/static/favicon.ico" type="image/x-icon" data-react-helmet="true">
       <link rel="stylesheet" href="/static/style.css" />
       <title>Deneact O.O</title>
       <script type="module" src="${browserBundlePath}"></script>
