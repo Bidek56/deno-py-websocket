@@ -9,7 +9,7 @@ import websockets
 logging.basicConfig()
 logger = logging.getLogger("server")
 
-STATE = {"value": 0}
+STATE = {"completed": 0, "log": ""}
 
 USERS = set()
 
@@ -54,14 +54,12 @@ async def counter(websocket, path):
 
             # print(f"Data: {data}")
 
-            if data["action"] == "minus":
-                STATE["value"] -= 1
-                await notify_state()
-            elif data["action"] == "plus":
-                STATE["value"] += 1
+            if data["action"] == "doTask":
+                STATE["completed"] += 1    
+                STATE["log"] = "/tmp/core-js-banners"
                 await notify_state()
             else:
-                logger.error("unsupported event: %s", data)
+                logger.error("unsupported action: %s", data)
     finally:
         await unregister(websocket)
 

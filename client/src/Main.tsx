@@ -2,7 +2,7 @@ import {React, ReactCookie} from './deps.ts'
 import NewTask from './NewTask.tsx'
 import NavBar from './NavBar.tsx'
 
-const Main: React.FC = (props: any) => {
+const Main: React.FC = (): JSX.Element => {
 
     const [userJob, setUserJob] = React.useState([]);
 

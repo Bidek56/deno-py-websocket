@@ -1,13 +1,15 @@
 
 import {React} from './deps.ts'
 
-const NewTask = (props: any) => {
+const NewTask: React.FC = (): JSX.Element => {
 
   // console.log(table)
 
   const [ws, setWs] = React.useState<any>(null);
-	const [valueCount, setValueCount] = React.useState(0);
-	const [userCount, setUserCount] = React.useState(0);
+	const [completedCount, setCompletedCount] = React.useState<number>(0);
+  const [log, setLog] = React.useState<string | null>(null);
+
+	const [userCount, setUserCount] = React.useState<number>(0);
 
   // car selection
   const carNames = ['Volvo', 'Saab', 'Mercedes', 'Audi']
@@ -40,20 +42,27 @@ const NewTask = (props: any) => {
   }
 
   const handleSubmit = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-    console.log('Submitted: ' + selectedCar + ":" + selectedColor + ":" + selectedModel);
+    // console.log('Submitted: ' + selectedCar + ":" + selectedColor + ":" + selectedModel);
+
+    setLog(null);
+    ws?.send(JSON.stringify({ action: "doTask", car: selectedCar, model: selectedModel, color: selectedColor }));
   }
  
  	const onReceiveMessage = ({ data }: any) => {
 		const obj = JSON.parse(data);
-    
+
     // console.log(obj)
+
+    if (!obj)
+      return
 
 		switch (obj.type) {
       case "state":
-        setValueCount(obj.value);
+        setCompletedCount(obj?.completed);
+        setLog(obj?.log)
         break;
       case "users":
-        setUserCount(obj.count);
+        setUserCount(obj?.count);
         break;
       default:
         console.error("unsupported event", data);
@@ -69,7 +78,7 @@ const NewTask = (props: any) => {
       // @ts-ignore
 			const wsl = new WebSocket(`ws://localhost:6789`);
 
-			console.log("WS:", wsl)
+			// console.log("WS:", wsl)
 
 			if (wsl) {
 				wsl.addEventListener("message", onReceiveMessage);
@@ -117,8 +126,9 @@ const NewTask = (props: any) => {
             </td>
           </tr>
           <tr>
-          <td className="value">Value: {valueCount}</td>
-          <td className="value">User: {userCount}</td>
+            <td className="value">Users: {userCount}</td>
+            <td className="value">Completed: {completedCount}</td>
+            <td > {log? ? log : ""} </td>            
           </tr>
         </tbody>
       </table>
