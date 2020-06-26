@@ -18,11 +18,16 @@ $ deno run -c tsconfig.json --allow-net --allow-read server.tsx
 $ denon start
 ```
 
-# MakeFile Script
+# MakeFile Script for Linux
 
 ```
 make dev
 make mon
+```
+
+# Task runner for Powershell
+```
+.\runTask.ps1
 ```
 
 # Test

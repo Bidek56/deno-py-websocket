@@ -1,6 +1,7 @@
 import {React, ReactCookie} from './deps.ts'
 import NewTask from './NewTask.tsx'
 import NavBar from './NavBar.tsx'
+import Login from './Login.tsx'
 
 const Main: React.FC = (): JSX.Element => {
 
@@ -9,7 +10,7 @@ const Main: React.FC = (): JSX.Element => {
 	const [valueCount, setValueCount] = React.useState(0);
 	const [userCount, setUserCount] = React.useState(0);
 
-	const [user, setUser] = React.useState<string | null>("admin")
+	const [user, setUser] = React.useState<string | null>(null)
 	const [cookies, , removeCookie] = ReactCookie.useCookies(['token']);
 
     const logout = () => {
@@ -26,7 +27,8 @@ const Main: React.FC = (): JSX.Element => {
                     <br/>
                     <NewTask/> 
                     <br/>
-                </div> : <div>Login</div> }
+                </div> : <Login setUser={setUser} />                 
+                }
             </React.Fragment>
         </ReactCookie.CookiesProvider>
    )

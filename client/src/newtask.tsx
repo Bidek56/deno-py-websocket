@@ -128,7 +128,7 @@ const NewTask: React.FC = (): JSX.Element => {
           <tr>
             <td className="value">Users: {userCount}</td>
             <td className="value">Completed: {completedCount}</td>
-            <td > {log? ? log : ""} </td>            
+            <td > {log ? log : ""} </td>            
           </tr>
         </tbody>
       </table>

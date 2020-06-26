@@ -11,6 +11,7 @@ import App from './src/App.tsx';
 import Main from './src/Main.tsx'
 import NewTask from './src/NewTask.tsx'
 import NavBar from './src/NavBar.tsx'
+import Login from './src/Login.tsx'
 
 const server = new Application();
 const router = new Router();
@@ -28,6 +29,7 @@ const js =
    const Main = ${Main};
    const NewTask = ${NewTask}
    const NavBar = ${NavBar}
+   const Login = ${Login}
    ReactDOM.hydrate(React.createElement(App), document.getElementById('react-app'));`;
 
 
@@ -38,12 +40,17 @@ const html =
       <meta charset="UTF-8" />
       <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       <link rel="shortcut icon" href="/static/favicon.ico" type="image/x-icon" data-react-helmet="true">
+      <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/css/bootstrap.min.css" integrity="sha384-r4NyP46KrjDleawBgD5tp8Y7UzmLA05oM1iAEQ17CSuDqnUK2+k9luXQOfXJCJ4I" crossorigin="anonymous">
       <link rel="stylesheet" href="/static/style.css" />
       <title>Deneact O.O</title>
       <script type="module" src="${browserBundlePath}"></script>
     </head>
     <body>
       <div id="react-app">${(ReactDOMServer as any).renderToString(<App />)}</div>
+      <!-- Optional JavaScript -->
+      <!-- Popper.js first, then Bootstrap JS -->
+      <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+      <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/js/bootstrap.min.js" integrity="sha384-oesi62hOLfzrys4LxRF63OJCXdXDipiYWBnvTl9Y9/TRlw5xlKIEHpNyvvDShgf/" crossorigin="anonymous"></script>
     </body>
   </html>`;
 
