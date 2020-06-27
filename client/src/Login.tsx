@@ -10,7 +10,7 @@ const Login: React.FC<{ setUser: (username: string | null) => void }> = ({ setUs
     const handleSignIn = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
-        // console.log("User:", userRef?.current.value)
+        console.log("User:", userRef?.current?.value)
 
         // if (!userRef?.current?.length) {
         //     console.log('Missing user')

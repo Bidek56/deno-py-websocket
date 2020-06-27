@@ -30,6 +30,11 @@ make mon
 .\runTask.ps1
 ```
 
+# Run and capture errors
+```
+deno run -c tsconfig.json --allow-net --allow-read server.tsx 2>&1 | tee -filePath error.log
+```
+
 # Test
 
 ```
