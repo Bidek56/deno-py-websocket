@@ -22,7 +22,7 @@
         "preserveConstEnums": false,
         "removeComments": false,
         "resolveJsonModule": true,
-        "strict": true,
+        "strict": false,
         "strictBindCallApply": false,
         "strictFunctionTypes": true,
         "strictNullChecks": false,
@@ -30,10 +30,6 @@
         "suppressExcessPropertyErrors": false,
         "suppressImplicitAnyIndexErrors": false,
         "useDefineForClassFields": false,
-        "lib": [
-            "deno.ns",
-            "dom",
-            "dom.iterable"
-        ]
+        "lib": []
     }
 }

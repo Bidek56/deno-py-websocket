@@ -9,8 +9,7 @@
         "net",
         "read"
       ],
-      "unstable": true,
-      "tsconfig": "tsconfig.json"
+      "unstable": true
     }
   },
   "watcher": {

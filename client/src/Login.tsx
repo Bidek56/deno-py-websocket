@@ -10,35 +10,30 @@ const Login: React.FC<{ setUser: (username: string | null) => void }> = ({ setUs
     const handleSignIn = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
+        // @ts-ignore
         console.log("User:", userRef?.current?.value)
 
-        // if (!userRef?.current?.length) {
-        //     console.log('Missing user')
-        //     // alert('Error: Missing user name')
-        //     setUser(null)
-        //     return
-        // }
+        // @ts-ignore
+        if (!userRef?.current?.value) {
+            console.log('Missing user')
+            // alert('Error: Missing user name')
+            setUser(null)
+            return
+        }
 
-        if (!passRef.current.length) {
+        // @ts-ignore
+        if (!passRef?.current?.value) {
             console.log('Missing password')
             // alert('Error: Missing password')
             setUser(null)
             return
         }
 
+        // @ts-ignore
+        console.log({ variables: { user: userRef.current.value, password: passRef.current.value } })
+
         // getUser({ variables: { name: userRef.current, password: passRef.current } })
     }
-
-    // onChange={e => userRef.current = (<HTMLInputElement>event.target).value}
-    // onChange={e => passRef.current = (<HTMLInputElement>event.target).value}  
-
-    // const updateUser = (event: React.ChangeEvent<HTMLInputElement>) => {
-        // console.log(event.currentTarget.value)
-        // console.log((event.target as HTMLInputElement).value);
-        // console.log((event.target as HTMLInputElement).value);
-        // var inputValue = (<HTMLInputElement>document.getElementById("exampleInputEmail1")).value;
-        // userRef.current = event.target.value;
-    // }
 
     return (
         <form id="loginForm" noValidate onSubmit={handleSignIn}>
@@ -51,7 +46,7 @@ const Login: React.FC<{ setUser: (username: string | null) => void }> = ({ setUs
 
             <div className="form-group mb-3">
                 <label className="form-label">Password</label>
-                <input type="password" className="form-control" placeholder="Enter password"  />
+                <input type="password" className="form-control" placeholder="Enter password" ref={passRef} />
             </div>
 
             <div className="mb-3 form-group">
