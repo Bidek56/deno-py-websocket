@@ -95,8 +95,7 @@ const NewTask: React.FC = (): JSX.Element => {
 	}, []);
 
   return (
-    <div>
-      <table>
+      <table className="table table-bordered">
         <tbody>
           <tr>
             <td>                
@@ -132,7 +131,6 @@ const NewTask: React.FC = (): JSX.Element => {
           </tr>
         </tbody>
       </table>
-    </div>
   );
 }
 

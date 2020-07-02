@@ -2,10 +2,35 @@ import {React, ReactCookie, PropTypes} from './deps.ts'
 
 const Login: React.FC<{ setUser: (username: string | null) => void }> = ({ setUser }): JSX.Element => {
 
-    // const userRef = React.useRef<string>('');
     const userRef = React.useRef<HTMLInputElement | null>(null);
     const passRef = React.useRef<string>('');
+    const [error, setError] = React.useState<string|null>(null)
+
     const [, setCookie] = ReactCookie.useCookies(['etl-token']);
+
+    const getUser = async () => {
+        const response = await fetch(`/login`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            // @ts-ignore
+            body: JSON.stringify({ user: userRef?.current?.value, pass: passRef?.current?.value })
+        })
+
+        // console.log("Res:", response)
+
+        if (response.ok) {
+            const body = await response.json()
+            
+            // console.log("Res:", body)
+
+            if (body.user) {
+                setCookie("token", body.user, { maxAge: 3600, sameSite: 'strict' });
+                setUser(body.user)
+            }
+        }       
+    }
 
     const handleSignIn = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -16,7 +41,7 @@ const Login: React.FC<{ setUser: (username: string | null) => void }> = ({ setUs
         // @ts-ignore
         if (!userRef?.current?.value) {
             console.log('Missing user')
-            // alert('Error: Missing user name')
+            setError('Missing user')
             setUser(null)
             return
         }
@@ -24,40 +49,30 @@ const Login: React.FC<{ setUser: (username: string | null) => void }> = ({ setUs
         // @ts-ignore
         if (!passRef?.current?.value) {
             console.log('Missing password')
+            setError('Missing password')
             // alert('Error: Missing password')
             setUser(null)
             return
         }
 
         // @ts-ignore
-        console.log({ variables: { user: userRef.current.value, password: passRef.current.value } })
-
-        // getUser({ variables: { name: userRef.current, password: passRef.current } })
+        // console.log({ variables: { user: userRef.current.value, password: passRef.current.value } })
+        getUser()
     }
 
     return (
-        <form id="loginForm" noValidate onSubmit={handleSignIn}>
-            <h3>Sign In</h3>
+        <div className="wrapper fadeInDown">
+            <div id="formContent">
+                <form id="loginForm" noValidate onSubmit={handleSignIn}>
+                    <h3>Sign In</h3>
 
-            <div className="form-group mb-3">
-                <label htmlFor="exampleInputEmail1" className="form-label">Email address</label>
-                <input id="exampleInputEmail1" type="email" className="form-control" placeholder="Enter email" ref={userRef}/>
+                    <input type="text" id="login" className="fadeIn second" name="login" placeholder="login" ref={userRef} />
+                    <input type="text" id="password" className="fadeIn third" name="login" placeholder="password" ref={passRef}/>
+                    <input type="submit" className="fadeIn fourth" value="Log In" />
+                    { error && <b style={{ background: 'red', color: 'white' }}>{error}</b> }
+                </form>
             </div>
-
-            <div className="form-group mb-3">
-                <label className="form-label">Password</label>
-                <input type="password" className="form-control" placeholder="Enter password" ref={passRef} />
-            </div>
-
-            <div className="mb-3 form-group">
-                <div className="custom-control custom-checkbox">
-                    <input type="checkbox" className="custom-control-input" id="customCheck1" />
-                    <label className="custom-control-label" htmlFor="customCheck1">Remember me</label>
-                </div>
-            </div>
-
-            <button type="submit" className="btn btn-primary btn-block">Submit</button>
-        </form>
+        </div>
     );
 }
 

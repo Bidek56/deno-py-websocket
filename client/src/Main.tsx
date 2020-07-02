@@ -11,7 +11,7 @@ const Main: React.FC = (): JSX.Element => {
 	const [userCount, setUserCount] = React.useState(0);
 
 	const [user, setUser] = React.useState<string | null>(null)
-	const [cookies, , removeCookie] = ReactCookie.useCookies(['token']);
+	const [cookies, ,removeCookie] = ReactCookie.useCookies(['token']);
 
     const logout = () => {
         removeCookie("token");
@@ -19,7 +19,7 @@ const Main: React.FC = (): JSX.Element => {
     }
 
     return (
-        <ReactCookie.CookiesProvider>        
+        <ReactCookie.CookiesProvider>
             <React.Fragment>
                 { user || (cookies && cookies.token) ? 
                 <div>

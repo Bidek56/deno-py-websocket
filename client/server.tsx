@@ -2,6 +2,9 @@
 import {
     Application,
     Router,
+    RouterContext,
+    Context,
+    Status,
     send,
     React,
     ReactDOMServer
@@ -30,8 +33,8 @@ const js =
    const NewTask = ${NewTask}
    const NavBar = ${NavBar}
    const Login = ${Login}
-   ReactDOM.hydrate(React.createElement(App), document.getElementById('react-app'));`;
 
+   ReactDOM.render(React.createElement(App), document.getElementById('react-app'));`;
 
 // the js code is loaded from a script tag
 const html =
@@ -55,6 +58,11 @@ const html =
   </html>`;
 
 
+function notFound(context: Context) {
+  context.response.status = Status.NotFound;
+  context.response.body = `<html><body><h1>404 - Not Found</h1><p>Path <code>${context.request.url}</code> not found.`;
+}
+
 // setting the routes
 router.get(browserBundlePath, (ctx) => { //the js code that is loaded from script tag
   ctx.response.type ="application/javascript"
@@ -71,15 +79,46 @@ router.get(browserBundlePath, (ctx) => { //the js code that is loaded from scrip
   });
 
 })
+.post("/login", async (context: RouterContext) => {
+  // console.log("Ctx:", context.request);
+  if (!context.request.hasBody) {
+    context.throw(Status.BadRequest, "Bad Request");
+  }
+  const body = await context.request.body();
+  console.log("post login", body);
+
+  let book: any;
+  if (body.type === "json") {
+      book = body.value;
+    } else if (body.type === "form") {
+      book = {};
+      console.log("Book form")
+    } else if (body.type === "form-data") {
+      const formData = await body.value.read();
+      book = formData.fields;
+    }
+
+    if (book) {
+      // context.assert(book.id && typeof book.id === "string", Status.BadRequest);
+      context.response.status = Status.OK;
+      context.response.body = book;
+      context.response.type = "json";
+      return;
+    }
+})
 .get("/", (ctx) => { //default route
   ctx.response.type = "text/html";
   ctx.response.body = html;
+  // console.log("Cookie:",ctx.cookies)
   // console.log(`Router: ${ctx.request.method} ${ctx.request.url}`);
 })
 
 // Passing Router as middleware
 server.use(router.routes());
 server.use(router.allowedMethods());
+
+// A basic 404 page
+server.use(notFound);
 
 // start server
 console.log("React SSR App listening on port 8000");
