@@ -3,8 +3,6 @@ import {React} from './deps.ts'
 
 const NewTask: React.FC = (): JSX.Element => {
 
-  // console.log(table)
-
   const [ws, setWs] = React.useState<any>(null);
 	const [completedCount, setCompletedCount] = React.useState<number>(0);
   const [log, setLog] = React.useState<string | null>(null);
@@ -95,42 +93,45 @@ const NewTask: React.FC = (): JSX.Element => {
 	}, []);
 
   return (
+    <div>
+      <h5 className="text-center">Input</h5>
+      <div className="input-group mb-3">
+        <label htmlFor="cars" className="input-group-text">Choose car:</label>
+        <select className="form-select" name="cars" id="cars" onChange={onSelectChange} >
+          {selectCar}
+        </select>
+        <label htmlFor="colors" className="input-group-text">Choose color:</label>
+        <select className="form-select" name="colors" id="colors" onChange={onSelectColorChange} >
+          {selectColor}
+        </select>
+      </div>
+      <div className="input-group mb-3">        
+        <label htmlFor="models" className="input-group-text">Choose model:</label>
+        <select className="form-select" name="models" id="colors" onChange={onSelectModelChange} >
+          {selectModel}
+        </select>        
+      </div>
+      <button className="btn btn-outline-primary" onClick={handleSubmit}>Submit</button>
+      <br/>
+      <br/>
+      <h5 className="text-center">Output</h5>
       <table className="table table-bordered">
+        <thead>
+          <tr>
+            <th scope="col">Users</th>
+            <th scope="col">Completed</th>
+            <th scope="col">Log</th>
+          </tr>
+        </thead>
         <tbody>
           <tr>
-            <td>                
-              <label htmlFor="cars" className="input-label">Choose car:</label>
-              <select name="cars" id="cars" onChange={onSelectChange} >
-                {selectCar}
-              </select>
-            </td>
-            <td>
-              <button className="submit" onClick={handleSubmit}>Submit</button>
-            </td>
-          </tr>
-          <tr>
-            <td>
-              <label htmlFor="colors" className="input-label">Choose color:</label>
-              <select name="colors" id="colors" onChange={onSelectColorChange} >
-                {selectColor}
-              </select>
-            </td>
-          </tr>
-          <tr>
-            <td>
-              <label htmlFor="models" className="input-label">Choose model:</label>
-              <select name="models" id="colors" onChange={onSelectModelChange} >
-                {selectModel}
-              </select>
-            </td>
-          </tr>
-          <tr>
-            <td className="value">Users: {userCount}</td>
-            <td className="value">Completed: {completedCount}</td>
-            <td > {log ? log : ""} </td>            
+            <td>{userCount}</td>
+            <td>{completedCount}</td>
+            <td>{log ? log : ""}</td>
           </tr>
         </tbody>
       </table>
+    </div>
   );
 }
 

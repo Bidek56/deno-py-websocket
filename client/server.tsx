@@ -10,8 +10,7 @@ import {
     ReactDOMServer
   } from "./src/deps.ts";
 
-import App from './src/App.tsx';
-import Main from './src/Main.tsx'
+import App from './src/App.tsx'
 import NewTask from './src/NewTask.tsx'
 import NavBar from './src/NavBar.tsx'
 import Login from './src/Login.tsx'
@@ -29,7 +28,6 @@ const js =
    import ReactCookie from 'https://dev.jspm.io/react-cookie';
 
    const App = ${App};
-   const Main = ${Main};
    const NewTask = ${NewTask}
    const NavBar = ${NavBar}
    const Login = ${Login}
@@ -39,7 +37,7 @@ const js =
 // the js code is loaded from a script tag
 const html =
   `<html>
-    <head> 
+    <head>
       <meta charset="UTF-8" />
       <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       <link rel="shortcut icon" href="/static/favicon.ico" type="image/x-icon" data-react-helmet="true">
@@ -49,7 +47,7 @@ const html =
       <script type="module" src="${browserBundlePath}"></script>
     </head>
     <body>
-      <div id="react-app">${(ReactDOMServer as any).renderToString(<App />)}</div>
+      <div id="react-app">${ReactDOMServer.renderToString(<App />)}</div>
       <!-- Optional JavaScript -->
       <!-- Popper.js first, then Bootstrap JS -->
       <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
@@ -87,21 +85,23 @@ router.get(browserBundlePath, (ctx) => { //the js code that is loaded from scrip
   const body = await context.request.body();
   console.log("post login", body);
 
-  let book: any;
+  let user: string | null = null;
   if (body.type === "json") {
-      book = body.value;
+
+      const val = body?.value;
+      user = val?.user;
+      const pass = val?.pass;
+
     } else if (body.type === "form") {
-      book = {};
       console.log("Book form")
     } else if (body.type === "form-data") {
-      const formData = await body.value.read();
-      book = formData.fields;
+      const formData = await body.value.read();      
     }
 
-    if (book) {
+    if (user) {
       // context.assert(book.id && typeof book.id === "string", Status.BadRequest);
       context.response.status = Status.OK;
-      context.response.body = book;
+      context.response.body = { 'user': user };
       context.response.type = "json";
       return;
     }
