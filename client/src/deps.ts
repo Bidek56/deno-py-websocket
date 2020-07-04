@@ -12,6 +12,8 @@ export { default as PropTypes } from 'https://dev.jspm.io/prop-types@15.7.2';
 
 // @deno-types="https://deno.land/x/types/react-dom/v16.13.1/server.d.ts"
 export { default as ReactDOMServer } from "https://dev.jspm.io/react-dom@16.13.1/server";
+
+// // @deno-types="https://cdn.jsdelivr.net/npm/react-cookie@4.0.3/index.d.ts"
 export { default as ReactCookie } from 'https://dev.jspm.io/react-cookie';
 
 // export { default as ReactDOMServer } from "https://cdn.pika.dev/react-dom@16.13.1/server.js";

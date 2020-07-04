@@ -1,12 +1,46 @@
 
-import {React} from './deps.ts'
+import {React, PropTypes} from './deps.ts'
 
-const NewTask: React.FC = (): JSX.Element => {
+type Dispatcher<S> = React.Dispatch<React.SetStateAction<S>>;
+
+export const ScrollModal: React.FC<{setShowModal: Dispatcher<boolean>, path: string|null }> = ({setShowModal, path }) => {
+
+  // console.log("Show modal", setShowModal)
+
+  // Similar to componentDidMount and componentDidUpdate:
+  React.useEffect(() => {
+    // Update the document title using the browser API
+
+    // @ts-ignore
+    document.title = `You clicked ${path}`;
+  });
+
+  const onClose = ( event: React.MouseEvent<HTMLButtonElement, MouseEvent> ) => {
+  // const handleLogClick = (log: string) => {
+    console.log("onClose")
+    setShowModal(false)
+  }
+
+  return !path ? null :
+      <div>Modal
+        <div>
+          <button className="btn btn-outline-danger" onClick={onClose}>Close</button>
+        </div>
+      </div>
+}
+
+ScrollModal.propTypes = {
+  setShowModal: PropTypes.func.isRequired,
+  path: PropTypes.string.isRequired
+}
+
+export const NewTask: React.FC = (): JSX.Element => {
 
   const [ws, setWs] = React.useState<any>(null);
 	const [completedCount, setCompletedCount] = React.useState<number>(0);
   const [log, setLog] = React.useState<string | null>(null);
 
+  const [showModal, setShowModal] = React.useState<boolean>(false);
 	const [userCount, setUserCount] = React.useState<number>(0);
 
   // car selection
@@ -25,18 +59,18 @@ const NewTask: React.FC = (): JSX.Element => {
   const [selectedModel, setSelectedModel] = React.useState<string>(modelNames[0])
 
   const onSelectChange = (event: React.ChangeEvent<{ name?: string; value: unknown }>) => {
-      console.log(event.target.value)
-      setSelectedCar(event.target.value as string)
+    console.log(event.target.value)
+    setSelectedCar(event.target.value as string)
   }
 
   const onSelectColorChange = (event: React.ChangeEvent<{ name?: string; value: unknown }>) => {
-      console.log(event.target.value)
-      setSelectedCar(event.target.value as string)
+    // console.log(event.target.value)
+    setSelectedCar(event.target.value as string)
   }
 
   const onSelectModelChange = (event: React.ChangeEvent<{ name?: string; value: unknown }>) => {
-      console.log(event.target.value)
-      setSelectedModel(event.target.value as string)
+    // console.log(event.target.value)
+    setSelectedModel(event.target.value as string)
   }
 
   const handleSubmit = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
@@ -46,6 +80,12 @@ const NewTask: React.FC = (): JSX.Element => {
     ws?.send(JSON.stringify({ action: "doTask", car: selectedCar, model: selectedModel, color: selectedColor }));
   }
  
+  const handleLogClick = ( event: React.MouseEvent<HTMLButtonElement, MouseEvent> ) => {
+  // const handleLogClick = (log: string) => {
+    console.log("Log", log)
+    setShowModal(true)
+  }
+
  	const onReceiveMessage = ({ data }: any) => {
 		const obj = JSON.parse(data);
 
@@ -127,12 +167,13 @@ const NewTask: React.FC = (): JSX.Element => {
           <tr>
             <td>{userCount}</td>
             <td>{completedCount}</td>
-            <td>{log ? log : ""}</td>
+            <td>{ log &&
+              <button className="btn btn-outline-primary" onClick={handleLogClick}>Show Log</button> }
+            </td>
           </tr>
         </tbody>
       </table>
+      {showModal && <ScrollModal setShowModal={setShowModal} path={log}/> }
     </div>
   );
 }
-
-export default NewTask

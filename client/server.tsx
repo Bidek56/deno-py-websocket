@@ -11,7 +11,7 @@ import {
   } from "./src/deps.ts";
 
 import App from './src/App.tsx'
-import NewTask from './src/NewTask.tsx'
+import { NewTask, ScrollModal } from './src/NewTask.tsx'
 import NavBar from './src/NavBar.tsx'
 import Login from './src/Login.tsx'
 
@@ -31,7 +31,8 @@ const js =
    const NewTask = ${NewTask}
    const NavBar = ${NavBar}
    const Login = ${Login}
-
+   const ScrollModal = ${ScrollModal}
+  
    ReactDOM.render(React.createElement(App), document.getElementById('react-app'));`;
 
 // the js code is loaded from a script tag

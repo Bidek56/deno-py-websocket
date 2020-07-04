@@ -1,5 +1,5 @@
 import {React, ReactCookie} from './deps.ts'
-import NewTask from './NewTask.tsx'
+import { NewTask } from './NewTask.tsx'
 import NavBar from './NavBar.tsx'
 import Login from './Login.tsx'
 
