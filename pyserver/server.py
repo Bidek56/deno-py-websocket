@@ -56,7 +56,7 @@ async def counter(websocket, path):
 
             if data["action"] == "doTask":
                 STATE["completed"] += 1    
-                STATE["log"] = "/tmp/core-js-banners"
+                STATE["log"] = r"c:\temp\pytest.ini"
                 await notify_state()
             else:
                 logger.error("unsupported action: %s", data)

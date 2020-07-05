@@ -5,24 +5,38 @@ type Dispatcher<S> = React.Dispatch<React.SetStateAction<S>>;
 
 export const ScrollModal: React.FC<{setShowModal: Dispatcher<boolean>, path: string|null }> = ({setShowModal, path }) => {
 
-  // console.log("Show modal", setShowModal)
+  const [logContent, setLogContent] = React.useState<string|null>(null);
 
   // Similar to componentDidMount and componentDidUpdate:
   React.useEffect(() => {
-    // Update the document title using the browser API
+    const fetchLog = async () => {
+      const response = await fetch(`/log`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        // @ts-ignore
+        body: JSON.stringify({ path })
+      })
 
-    // @ts-ignore
-    document.title = `You clicked ${path}`;
-  });
+      // console.log("Res:", response)
+
+      if (response.ok) {
+        const body = await response.json()        
+        setLogContent(body?.content)
+      }
+    }
+
+    fetchLog()
+  },[path]);
 
   const onClose = ( event: React.MouseEvent<HTMLButtonElement, MouseEvent> ) => {
-  // const handleLogClick = (log: string) => {
-    console.log("onClose")
     setShowModal(false)
   }
 
   return !path ? null :
-      <div>Modal
+      <div>Log for: {path}<br/>
+        {logContent}
         <div>
           <button className="btn btn-outline-danger" onClick={onClose}>Close</button>
         </div>

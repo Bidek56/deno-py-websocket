@@ -17,6 +17,7 @@ import Login from './src/Login.tsx'
 
 const server = new Application();
 const router = new Router();
+const decoder = new TextDecoder('utf-8');
 
 // Adding a route for js code to use i the browser
 const browserBundlePath = "/browser.js";
@@ -106,6 +107,42 @@ router.get(browserBundlePath, (ctx) => { //the js code that is loaded from scrip
       context.response.type = "json";
       return;
     }
+})
+.post("/log", async (context: RouterContext) => {
+  // console.log("Ctx:", context.request);
+  if (!context.request.hasBody) {
+    context.throw(Status.BadRequest, "Bad Request");
+  }
+  const body = await context.request.body();
+
+  let value: any | null = null;
+
+  if (body.type === "json") {
+    value = body?.value;
+  }
+
+  if (value && 'path' in value) {
+
+    try {
+      console.log("Deno.readFileSync:", value["path"])
+
+      const content = decoder.decode(Deno.readFileSync(value["path"]));
+
+      // context.assert(book.id && typeof book.id === "string", Status.BadRequest);
+      context.response.status = Status.OK;
+      context.response.body = { 'content': content };
+      context.response.type = "json";
+      return;
+
+    } catch (error) {
+		  console.log("catch:", error);
+      
+      context.response.status = Status.InternalServerError;
+      context.response.body = { 'error': error };
+      context.response.type = "json";
+      return;
+	  }
+  }
 })
 .get("/", (ctx) => { //default route
   ctx.response.type = "text/html";
