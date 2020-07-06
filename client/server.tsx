@@ -15,7 +15,10 @@ import { NewTask, ScrollModal } from './src/NewTask.tsx'
 import NavBar from './src/NavBar.tsx'
 import Login from './src/Login.tsx'
 
-const server = new Application();
+const server = new Application({
+  // This will be used to sign cookies to help prevent cookie tampering
+  keys: ["secret1"],
+});
 const router = new Router();
 const decoder = new TextDecoder('utf-8');
 
@@ -58,9 +61,9 @@ const html =
   </html>`;
 
 
-function notFound(context: Context) {
-  context.response.status = Status.NotFound;
-  context.response.body = `<html><body><h1>404 - Not Found</h1><p>Path <code>${context.request.url}</code> not found.`;
+function notFound(ctx: Context) {
+  ctx.response.status = Status.NotFound;
+  ctx.response.body = `<html><body><h1>404 - Not Found</h1><p>Path <code>${ctx.request.url}</code> not found.`;
 }
 
 // setting the routes
@@ -79,12 +82,12 @@ router.get(browserBundlePath, (ctx) => { //the js code that is loaded from scrip
   });
 
 })
-.post("/login", async (context: RouterContext) => {
-  // console.log("Ctx:", context.request);
-  if (!context.request.hasBody) {
-    context.throw(Status.BadRequest, "Bad Request");
+.post("/login", async (ctx: RouterContext) => {
+  // console.log("Ctx:", ctx.request);
+  if (!ctx.request.hasBody) {
+    ctx.throw(Status.BadRequest, "Bad Request");
   }
-  const body = await context.request.body();
+  const body = await ctx.request.body();
   console.log("post login", body);
 
   let user: string | null = null;
@@ -101,19 +104,24 @@ router.get(browserBundlePath, (ctx) => { //the js code that is loaded from scrip
     }
 
     if (user) {
-      // context.assert(book.id && typeof book.id === "string", Status.BadRequest);
-      context.response.status = Status.OK;
-      context.response.body = { 'user': user };
-      context.response.type = "json";
+      ctx.cookies.set("server-token", user, { httpOnly: true });
+
+      // console.log(Array.from(ctx.cookies.keys()))
+      // console.log("Token:", ctx.cookies.get("token"));
+
+      // ctx.assert(book.id && typeof book.id === "string", Status.BadRequest);
+      ctx.response.status = Status.OK;
+      ctx.response.body = { 'user': user };
+      ctx.response.type = "json";
       return;
     }
 })
-.post("/log", async (context: RouterContext) => {
-  // console.log("Ctx:", context.request);
-  if (!context.request.hasBody) {
-    context.throw(Status.BadRequest, "Bad Request");
+.post("/log", async (ctx: RouterContext) => {
+  // console.log("Ctx:", ctx.request);
+  if (!ctx.request.hasBody) {
+    ctx.throw(Status.BadRequest, "Bad Request");
   }
-  const body = await context.request.body();
+  const body = await ctx.request.body();
 
   let value: any | null = null;
 
@@ -128,27 +136,35 @@ router.get(browserBundlePath, (ctx) => { //the js code that is loaded from scrip
 
       const content = decoder.decode(Deno.readFileSync(value["path"]));
 
-      // context.assert(book.id && typeof book.id === "string", Status.BadRequest);
-      context.response.status = Status.OK;
-      context.response.body = { 'content': content };
-      context.response.type = "json";
+      // ctx.assert(book.id && typeof book.id === "string", Status.BadRequest);
+      ctx.response.status = Status.OK;
+      ctx.response.body = { 'content': content };
+      ctx.response.type = "json";
       return;
 
     } catch (error) {
 		  console.log("catch:", error);
       
-      context.response.status = Status.InternalServerError;
-      context.response.body = { 'error': error };
-      context.response.type = "json";
+      ctx.response.status = Status.InternalServerError;
+      ctx.response.body = { 'error': error };
+      ctx.response.type = "json";
       return;
 	  }
   }
 })
 .get("/", (ctx) => { //default route
-  ctx.response.type = "text/html";
-  ctx.response.body = html;
-  // console.log("Cookie:",ctx.cookies)
-  // console.log(`Router: ${ctx.request.method} ${ctx.request.url}`);
+
+  if (ctx.cookies.get("server-token")) {
+
+    ctx.response.type = "text/html";
+    ctx.response.body = html;
+    // console.log(`Router: ${ctx.request.method} ${ctx.request.url}`);
+  } else {
+    ctx.response.status = Status.OK;
+    ctx.response.body = { 'error': "unauthorized" };
+    ctx.response.type = "json";
+    return;
+  }
 })
 
 // Passing Router as middleware
