@@ -1,5 +1,5 @@
 
-import {React, PropTypes} from './deps.ts'
+import {React, PropTypes} from '../deps.ts'
 
 type Dispatcher<S> = React.Dispatch<React.SetStateAction<S>>;
 

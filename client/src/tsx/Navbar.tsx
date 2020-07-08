@@ -1,4 +1,4 @@
-import {React, PropTypes} from './deps.ts'
+import {React, PropTypes} from '../deps.ts'
 
 const NavBar: React.FC<{ logout: () => void }> = ({ logout }): JSX.Element => {
 

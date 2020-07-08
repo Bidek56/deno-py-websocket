@@ -1,33 +1,37 @@
-import {React, ReactCookie, PropTypes} from './deps.ts'
+import {React, ReactCookie, PropTypes} from '../deps.ts'
 
-const Login: React.FC<{ setUser: (username: string | null) => void }> = ({ setUser }): JSX.Element => {
+const Login: React.FC<{ setToken: (username: string | null) => void, }> = ({ setToken }): JSX.Element => {
 
     const userRef = React.useRef<HTMLInputElement | null>(null);
-    const passRef = React.useRef<string>('');
-    const [error, setError] = React.useState<string|null>(null)
+    const passRef = React.useRef<HTMLInputElement | null>(null);
+    const [error, setError] = React.useState<string | null>(null)
 
     const [, setCookie] = ReactCookie.useCookies(['etl-token']);
 
     const getUser = async () => {
-        const response = await fetch(`/login`, {
-            method: "POST",
+
+        // const pass = await bcrypt.hash(passRef?.current?.value);
+
+        const response = await fetch('/auth/login', {
+            method: 'POST',
             headers: {
-                "Content-Type": "application/json",
+                'Content-Type': 'application/json;charset=utf-8'
             },
             // @ts-ignore
             body: JSON.stringify({ user: userRef?.current?.value, pass: passRef?.current?.value })
         })
 
-        // console.log("Res:", response)
+        // console.log("Res OK:", response.ok)
 
         if (response.ok) {
             const body = await response.json()
             
             // console.log("Res:", body)
+            // console.log("Token:", body?.data?.accessToken)
 
-            if (body.user) {
-                setCookie("token", body.user, { maxAge: 3600, sameSite: 'strict' });
-                setUser(body.user)
+            if (body?.data?.accessToken) {
+                setToken(body?.data?.accessToken)
+                setCookie("token", body?.data?.accessToken, { maxAge: 3600, sameSite: 'strict' });
             }
         }       
     }
@@ -42,7 +46,7 @@ const Login: React.FC<{ setUser: (username: string | null) => void }> = ({ setUs
         if (!userRef?.current?.value) {
             console.log('Missing user')
             setError('Missing user')
-            setUser(null)
+            setToken(null)
             return
         }
 
@@ -51,7 +55,7 @@ const Login: React.FC<{ setUser: (username: string | null) => void }> = ({ setUs
             console.log('Missing password')
             setError('Missing password')
             // alert('Error: Missing password')
-            setUser(null)
+            setToken(null)
             return
         }
 
@@ -77,7 +81,7 @@ const Login: React.FC<{ setUser: (username: string | null) => void }> = ({ setUs
 }
 
 Login.propTypes = {
-    setUser: PropTypes.func.isRequired
+    setToken: PropTypes.func.isRequired
 }
 
 export default Login;
