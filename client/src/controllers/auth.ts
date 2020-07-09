@@ -11,8 +11,6 @@ export async function login(ctx: any) {
         const body = await ctx.request.body();
         const user = body?.value?.user;
 
-        console.log("login body;", body)
-
         if (!user) {
             ctx.throw(Status.UnprocessableEntity, "Wrong user name");
         } else if (await compare(body?.value?.pass, "$2y$10$.n0T8FCm17a8N6dLnxbRLejOBpdS05QKvW1rtrP.7DCpn1FBhKsDW")) {
@@ -25,7 +23,7 @@ export async function login(ctx: any) {
 
             const token = makeJwt({ header, payload, key });
 
-            ctx.cookies.set("server-token", token, { httpOnly: true });
+            ctx.cookies.set("server-token", token, { httpOnly: true, maxAge: 36000 });
 
             ctx.response.status = Status.OK;
             ctx.response.type = "json";
@@ -40,5 +38,47 @@ export async function login(ctx: any) {
 
     } catch (error) {
 		  console.log("catch:", error);
+    }
+}
+
+export async function logout(ctx: any) {
+
+    try {
+
+        if (!ctx.request.hasBody) {
+            ctx.throw(Status.BadRequest, "Bad Request");
+        }
+
+        const body = await ctx.request.body();
+        const token = body?.value?.token;
+
+        console.log("Logout:", body)
+
+        if (!token) {
+            ctx.throw(Status.UnprocessableEntity, "Wrong user name");
+        } else {
+            ctx.cookies.delete("server-token")
+        }
+
+    } catch (error) {
+		  console.log("catch:", error);
+    }
+}
+
+export async function token(ctx: any) {
+
+    try {
+        if (ctx.cookies.get("server-token")) {
+            ctx.response.status = Status.OK;
+            ctx.response.body = { 'token': ctx.cookies.get("server-token") };
+            ctx.response.type = "json";
+            return;
+        } else {
+            ctx.response.status = Status.OK;
+            ctx.response.body = { 'error': 'server-token not found' };
+            ctx.response.type = "json";
+        }
+    } catch (error) {
+        console.log("catch:", error);
     }
 }

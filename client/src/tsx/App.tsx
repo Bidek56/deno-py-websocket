@@ -1,24 +1,34 @@
-import {React, ReactCookie} from '../deps.ts'
+import { React } from '../deps.ts'
 import { NewTask } from './NewTask.tsx'
 import NavBar from './NavBar.tsx'
 import Login from './Login.tsx'
 
 const App: React.FC = (): JSX.Element => {
 
-    const [userJob, setUserJob] = React.useState([]);
-
-	const [valueCount, setValueCount] = React.useState(0);
-	const [userCount, setUserCount] = React.useState(0);
-
+	const [valueCount, setValueCount] = React.useState<number>(0);
+	const [userCount, setUserCount] = React.useState<number>(0);
     const [token, setToken] = React.useState<string | null>(null)
-	const [cookies, ,removeCookie] = ReactCookie.useCookies(['token']);
 
-    const logout = () => {
-        removeCookie("token");
-        setToken(null)
-    } 
+    const logout = async () => {
 
-    const readCookie = async () => {
+        try {
+            const response = await fetch('/auth/logout', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json;charset=utf-8'
+                },
+                // @ts-ignore
+                body: JSON.stringify({ token })
+            });
+            // console.log("Logout res:", response)
+
+            setToken(null)
+        } catch (e) {
+            console.log("Read token error:", e);
+        }
+    }
+
+    const readToken = async () => {
         try {
             const response = await fetch('/auth/token');
 
@@ -28,31 +38,30 @@ const App: React.FC = (): JSX.Element => {
                 const body = await response.json()
                 if (body?.token) {
                     setToken(body?.token)
-                }
+                } else if (body?.error) {
+                    setToken(null)
+                }                
             }
-
         } catch (e) {
-            console.log("Read cookie error:", e);
+            console.log("Read token error:", e);
         }
     };
 
     React.useEffect(() => {
-        readCookie();
+        readToken();
     }, []);
 
     return (
-        <ReactCookie.CookiesProvider>
-            <React.Fragment>
-                { token || (cookies && cookies.token) ? 
-                    <div>
-                        <NavBar logout={logout} />
-                        <br/>
-                        <NewTask/> 
-                        <br/>
-                    </div> : <Login setToken={setToken} />
-                }
-            </React.Fragment>
-        </ReactCookie.CookiesProvider>
+        <React.Fragment>
+            { token ?
+                <div>
+                    <NavBar logout={logout} />
+                    <br/>
+                    <NewTask/> 
+                    <br/>
+                </div> : <Login setToken={setToken} />
+            }
+        </React.Fragment>
    )
 }
 

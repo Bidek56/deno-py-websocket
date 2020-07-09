@@ -1,12 +1,10 @@
-import {React, ReactCookie, PropTypes} from '../deps.ts'
+import {React, PropTypes} from '../deps.ts'
 
 const Login: React.FC<{ setToken: (username: string | null) => void, }> = ({ setToken }): JSX.Element => {
 
     const userRef = React.useRef<HTMLInputElement | null>(null);
     const passRef = React.useRef<HTMLInputElement | null>(null);
     const [error, setError] = React.useState<string | null>(null)
-
-    const [, setCookie] = ReactCookie.useCookies(['etl-token']);
 
     const getUser = async () => {
 
@@ -31,7 +29,6 @@ const Login: React.FC<{ setToken: (username: string | null) => void, }> = ({ set
 
             if (body?.data?.accessToken) {
                 setToken(body?.data?.accessToken)
-                setCookie("token", body?.data?.accessToken, { maxAge: 3600, sameSite: 'strict' });
             }
         }       
     }

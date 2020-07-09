@@ -33,7 +33,7 @@ const html =
       <link rel="shortcut icon" href="/static/favicon.ico" type="image/x-icon" data-react-helmet="true">
       <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/css/bootstrap.min.css" integrity="sha384-r4NyP46KrjDleawBgD5tp8Y7UzmLA05oM1iAEQ17CSuDqnUK2+k9luXQOfXJCJ4I" crossorigin="anonymous">
       <link rel="stylesheet" href="/static/style.css" />
-      <title>Deneact O.O</title>
+      <title>Deno ETL</title>
       <script type="module" src="${browserBundlePath}"></script>
     </head>
     <body>
