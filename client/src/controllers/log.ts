@@ -1,6 +1,6 @@
-import { Status } from "../deps.ts";
+import { Status, RouterContext } from "../deps.ts";
 
-export log = async (ctx: RouterContext) => {
+export const log = async (ctx: RouterContext) => {
 
     try {
         // console.log("Ctx:", ctx.request);
@@ -9,7 +9,7 @@ export log = async (ctx: RouterContext) => {
         }
         const body = await ctx.request.body();
 
-        let value: any | null = null;
+        let value: object | null = null;
 
         if (body.type === "json") {
             value = body?.value;

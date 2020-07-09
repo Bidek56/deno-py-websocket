@@ -1,4 +1,6 @@
-export default async (ctx: any, next: any) => {
+import { Context } from "../deps.ts";
+
+export default async (ctx: Context, next: () => Promise<void>) => {
   const start = Date.now();
   await next();
   const ms = Date.now() - start;

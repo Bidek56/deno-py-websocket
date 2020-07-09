@@ -22,4 +22,5 @@ export {
   validateJwt,
   Jose,
   Payload,
+  JwtObject,
 } from "https://deno.land/x/djwt@v0.9.0/validate.ts";

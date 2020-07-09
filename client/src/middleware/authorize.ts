@@ -1,6 +1,8 @@
-import { Status, validateJwt } from "../deps.ts";
+import { Status, RouterContext, validateJwt, Jose, Payload } from "../deps.ts";
 
-export default async (ctx: any, next: any) => {
+type JwtObject = { header: Jose; payload?: Payload; signature: string }
+
+export default async (ctx: RouterContext, next: () => Promise<void>) => {
   const authHeader = ctx.request.headers.get("authorization");
 
   if (!authHeader) {
@@ -12,9 +14,9 @@ export default async (ctx: any, next: any) => {
       const key: string = Deno.env.get("TOKEN_SECRET") ||
         "H3EgqdTJ1SqtOekMQXxwufbo2iPpu89O";
 
-      const { payload }: any = await validateJwt(token, key);
+      const jwtObject: JwtObject|null = await validateJwt(token, key);
 
-      ctx.request.user = payload;
+      // ctx.request.user = jwtObject?.payload;
 
       await next();
     } catch (err) {

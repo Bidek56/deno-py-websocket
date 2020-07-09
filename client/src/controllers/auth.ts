@@ -1,6 +1,6 @@
-import { Status, compare, makeJwt, Jose, Payload } from "../deps.ts";
+import { Status, compare, makeJwt, Jose, Payload, RouterContext } from "../deps.ts";
 
-export async function login(ctx: any) {
+export const login = async(ctx: RouterContext) => {
 
     try {
 
@@ -41,7 +41,7 @@ export async function login(ctx: any) {
     }
 }
 
-export async function logout(ctx: any) {
+export async function logout(ctx: RouterContext) {
 
     try {
 
@@ -65,7 +65,7 @@ export async function logout(ctx: any) {
     }
 }
 
-export async function token(ctx: any) {
+export const token = async (ctx: RouterContext) => {
 
     try {
         if (ctx.cookies.get("server-token")) {

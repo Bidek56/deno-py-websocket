@@ -1,8 +1,8 @@
-import { isHttpError, Status } from "../deps.ts";
+import { isHttpError, Status, Context } from "../deps.ts";
 
 const between = (value: number, start: number, end: number) => value >= start && value < end;
 
-export default async (ctx: any, next: any) => {
+export default async (ctx: Context, next: () => Promise<void>) => {
   try {
     await next();
 
