@@ -61,10 +61,12 @@ router
 .get("/", (ctx) => {
   ctx.response.type = "text/html";
   ctx.response.body = html;
+  ctx.response.status = Status.OK;
 })
 .get(browserBundlePath, (ctx) => { //the js code that is loaded from script tag
   ctx.response.type ="application/javascript"
   ctx.response.body = js;
+  ctx.response.status = Status.OK;
   // console.log(`Router: ${ctx.request.method} ${ctx.request.url}`);
 });
 

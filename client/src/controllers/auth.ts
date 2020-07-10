@@ -68,7 +68,7 @@ export async function logout(ctx: RouterContext) {
 export const token = async (ctx: RouterContext) => {
 
     try {
-        if (ctx.cookies.get("server-token")) {
+        if (ctx?.cookies?.get("server-token")) {
             ctx.response.status = Status.OK;
             ctx.response.body = { 'token': ctx.cookies.get("server-token") };
             ctx.response.type = "json";
@@ -77,6 +77,7 @@ export const token = async (ctx: RouterContext) => {
             ctx.response.status = Status.OK;
             ctx.response.body = { 'error': 'server-token not found' };
             ctx.response.type = "json";
+            return;
         }
     } catch (error) {
         console.log("catch:", error);
