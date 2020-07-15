@@ -17,7 +17,6 @@ const App: React.FC = (): JSX.Element => {
                 headers: {
                     'Content-Type': 'application/json;charset=utf-8'
                 },
-                // @ts-ignore
                 body: JSON.stringify({ token })
             });
             // console.log("Logout res:", response)

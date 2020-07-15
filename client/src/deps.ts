@@ -1,4 +1,5 @@
 export {Application, Router, RouterContext, Context, Status, send, isHttpError} from 'https://deno.land/x/oak/mod.ts';
+export {Body} from 'https://deno.land/x/oak/body.ts';
 
 // @deno-types="https://deno.land/x/types/react/v16.13.1/react.d.ts"
 export { default as React } from "https://dev.jspm.io/react@16.13.1";

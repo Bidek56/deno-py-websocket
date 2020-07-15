@@ -1,4 +1,6 @@
-import { Status, compare, makeJwt, Jose, Payload, RouterContext } from "../deps.ts";
+import { Status, compare, makeJwt, Jose, Payload, RouterContext, Body } from "../deps.ts";
+
+type LoginBody = Promise<any> & { user?: string, pass?: string }
 
 export const login = async(ctx: RouterContext) => {
 
@@ -8,12 +10,20 @@ export const login = async(ctx: RouterContext) => {
             ctx.throw(Status.BadRequest, "Bad Request");
         }
 
-        const body = await ctx.request.body();
-        const user = body?.value?.user;
+        const body: Body = await ctx.request.body();
+        
+        let value: LoginBody;
+        if (body?.type === 'json') {
+            value = body?.value;
+        } else {
+            ctx.throw(Status.UnprocessableEntity, "Wrong body type");
+        }
 
-        if (!user) {
+        const user = value?.user;
+
+        if (!value || !user) {
             ctx.throw(Status.UnprocessableEntity, "Wrong user name");
-        } else if (await compare(body?.value?.pass, "$2y$10$.n0T8FCm17a8N6dLnxbRLejOBpdS05QKvW1rtrP.7DCpn1FBhKsDW")) {
+        } else if (value?.pass && await compare(value?.pass, "$2y$10$.n0T8FCm17a8N6dLnxbRLejOBpdS05QKvW1rtrP.7DCpn1FBhKsDW")) {
             const header: Jose = { alg: "HS256", typ: "JWT" };
             const payload: Payload = {
                 id: user,
@@ -29,7 +39,7 @@ export const login = async(ctx: RouterContext) => {
             ctx.response.type = "json";
             ctx.response.body = {
                 status: "success",
-                message: `Logged in with ${body?.value?.user}`,
+                message: `Logged in with ${value?.user}`,
                 data: { accessToken: token },
             };
         } else {
@@ -37,7 +47,7 @@ export const login = async(ctx: RouterContext) => {
         }
 
     } catch (error) {
-		  console.log("catch:", error);
+		console.log("catch:", error);
     }
 }
 
@@ -49,10 +59,8 @@ export async function logout(ctx: RouterContext) {
             ctx.throw(Status.BadRequest, "Bad Request");
         }
 
-        const body = await ctx.request.body();
+        const body: any = await ctx.request.body();
         const token = body?.value?.token;
-
-        console.log("Logout:", body)
 
         if (!token) {
             ctx.throw(Status.UnprocessableEntity, "Wrong user name");
@@ -61,23 +69,19 @@ export async function logout(ctx: RouterContext) {
         }
 
     } catch (error) {
-		  console.log("catch:", error);
+        console.log("catch:", error);
     }
 }
 
 export const token = async (ctx: RouterContext) => {
 
     try {
-        if (ctx?.cookies?.get("server-token")) {
-            ctx.response.status = Status.OK;
-            ctx.response.body = { 'token': ctx.cookies.get("server-token") };
-            ctx.response.type = "json";
-            return;
+        ctx.response.status = Status.OK;
+        ctx.response.type = "json";
+        if (ctx?.cookies?.get("server-token")) {            
+            ctx.response.body = { 'token': ctx.cookies.get("server-token") };            
         } else {
-            ctx.response.status = Status.OK;
             ctx.response.body = { 'error': 'server-token not found' };
-            ctx.response.type = "json";
-            return;
         }
     } catch (error) {
         console.log("catch:", error);

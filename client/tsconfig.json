@@ -1,14 +1,11 @@
 {
     "compilerOptions": {
-        "allowUmdGlobalAccess": false,
         "allowUnreachableCode": false,
         "allowUnusedLabels": false,
-        "alwaysStrict": true,
-        "assumeChangesOnlyAffectDirectDependencies": false,
+        "alwaysStrict": false,
         "checkJs": false,
         "allowJs": false,
         "disableSizeLimit": false,
-        "generateCpuProfile": "profile.cpuprofile",
         "jsx": "react",
         "jsxFactory": "React.createElement",
         "noFallthroughCasesInSwitch": false,
@@ -30,6 +27,11 @@
         "suppressExcessPropertyErrors": false,
         "suppressImplicitAnyIndexErrors": false,
         "useDefineForClassFields": false,
-        "lib": []
+        "lib": [
+            "dom",
+            "es2020",
+            "deno.ns",
+            "dom.iterable"
+        ]
     }
 }
