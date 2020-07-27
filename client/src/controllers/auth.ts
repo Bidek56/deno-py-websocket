@@ -1,4 +1,4 @@
-import { Status, compare, makeJwt, Jose, Payload, RouterContext, Body } from "../deps.ts";
+import { Status, verify, makeJwt, Jose, Payload, RouterContext, Body } from "../deps.ts";
 
 type LoginBody = Promise<any> & { user?: string, pass?: string }
 
@@ -12,18 +12,18 @@ export const login = async(ctx: RouterContext) => {
 
         const body: Body = await ctx.request.body();
         
-        let value: LoginBody;
+        let value: LoginBody | null = null;
         if (body?.type === 'json') {
-            value = body?.value;
+            value = await body?.value;
         } else {
             ctx.throw(Status.UnprocessableEntity, "Wrong body type");
         }
 
-        const user = value?.user;
+        const user = await value?.user;
 
         if (!value || !user) {
             ctx.throw(Status.UnprocessableEntity, "Wrong user name");
-        } else if (value?.pass && await compare(value?.pass, "$2y$10$.n0T8FCm17a8N6dLnxbRLejOBpdS05QKvW1rtrP.7DCpn1FBhKsDW")) {
+        } else if (value?.pass && await verify(value?.pass, "c2NyeXB0AA4AAAAIAAAAAQVR+9n5QXXXutDKrHp70j9oQA200hKYVM6RDl2UrgTSLfl5DBkEtx6r73se5iAxpQ7Eh89S5Q6nsd7O1rGdZqBcXQIQTcTFnJlmCpsx5qUp")) {
             const header: Jose = { alg: "HS256", typ: "JWT" };
             const payload: Payload = {
                 id: user,

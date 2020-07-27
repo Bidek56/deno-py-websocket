@@ -9,7 +9,8 @@
         "net",
         "read"
       ],
-      "unstable": true
+      "unstable": true,
+      "tsconfig": "tsconfig.json"
     },
     "test": {
       "cmd": "deno test"

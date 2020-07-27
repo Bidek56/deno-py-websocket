@@ -2,8 +2,9 @@ import { Status, RouterContext } from "../deps.ts";
 
 export const log = async (ctx: RouterContext) => {
 
+    const decoder = new TextDecoder("utf-8")
+
     try {
-        // console.log("Ctx:", ctx.request);
         if (!ctx.request.hasBody) {
             ctx.throw(Status.BadRequest, "Bad Request");
         }
@@ -12,7 +13,7 @@ export const log = async (ctx: RouterContext) => {
         let value: object | null = null;
 
         if (body.type === "json") {
-            value = body?.value;
+            value = await body?.value;
         }
 
         if (value && 'path' in value) {
@@ -21,7 +22,8 @@ export const log = async (ctx: RouterContext) => {
 
             const content = decoder.decode(Deno.readFileSync(value["path"]));
 
-            // ctx.assert(book.id && typeof book.id === "string", Status.BadRequest);
+            // ctx.assert(!content, Status.BadRequest);
+
             ctx.response.status = Status.OK;
             ctx.response.body = { 'content': content };
             ctx.response.type = "json";

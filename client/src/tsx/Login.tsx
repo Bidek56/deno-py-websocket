@@ -7,15 +7,11 @@ const Login: React.FC<{ setToken: (username: string | null) => void, }> = ({ set
     const [error, setError] = React.useState<string | null>(null)
 
     const getUser = async () => {
-
-        // const pass = await bcrypt.hash(passRef?.current?.value);
-
         const response = await fetch('/auth/login', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json;charset=utf-8'
             },
-            // @ts-ignore
             body: JSON.stringify({ user: userRef?.current?.value, pass: passRef?.current?.value })
         })
 
@@ -36,10 +32,6 @@ const Login: React.FC<{ setToken: (username: string | null) => void, }> = ({ set
     const handleSignIn = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
-        // @ts-ignore
-        console.log("User:", userRef?.current?.value)
-
-        // @ts-ignore
         if (!userRef?.current?.value) {
             console.log('Missing user')
             setError('Missing user')
@@ -47,7 +39,6 @@ const Login: React.FC<{ setToken: (username: string | null) => void, }> = ({ set
             return
         }
 
-        // @ts-ignore
         if (!passRef?.current?.value) {
             console.log('Missing password')
             setError('Missing password')
@@ -56,8 +47,6 @@ const Login: React.FC<{ setToken: (username: string | null) => void, }> = ({ set
             return
         }
 
-        // @ts-ignore
-        // console.log({ variables: { user: userRef.current.value, password: passRef.current.value } })
         getUser()
     }
 

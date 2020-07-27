@@ -6,6 +6,7 @@ import logger from "./src/middleware/logger.ts";
 import timer from "./src/middleware/timer.ts";
 import home from "./src/routes/home.tsx";
 import auth from "./src/routes/auth.ts";
+import log from "./src/routes/log.ts"
 
 const server = new Application();
 
@@ -14,7 +15,8 @@ server.use(logger);
 server.use(timer);
 
 server.use(home.routes())
-      .use(auth.routes());
+      .use(auth.routes())
+      .use(log.routes());
 
 server.addEventListener("error", (evt) => {
   // Will log the thrown error to the console.

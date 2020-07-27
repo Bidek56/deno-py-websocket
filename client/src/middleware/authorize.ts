@@ -3,19 +3,17 @@ import { Status, RouterContext, validateJwt, Jose, Payload } from "../deps.ts";
 type JwtObject = { header: Jose; payload?: Payload; signature: string }
 
 export default async (ctx: RouterContext, next: () => Promise<void>) => {
-  const authHeader = ctx.request.headers.get("authorization");
+  const serverToken = ctx.cookies.get("server-token")
 
-  if (!authHeader) {
+  if (!serverToken) {
     ctx.throw(Status.Unauthorized, "Access Token Missing!");
   } else {
-    const token = authHeader.split(" ")[1];
-
     try {
-      const key: string = Deno.env.get("TOKEN_SECRET") ||
-        "H3EgqdTJ1SqtOekMQXxwufbo2iPpu89O";
+      const key: string = Deno.env.get("TOKEN_SECRET") || "H3EgqdTJ1SqtOekMQXxwufbo2iPpu89O";
 
-      const jwtObject: JwtObject|null = await validateJwt(token, key);
+      const jwtObject: JwtObject|null = await validateJwt(serverToken, key);
 
+      // console.log("jwtObject:",  jwtObject)
       // ctx.request.user = jwtObject?.payload;
 
       await next();

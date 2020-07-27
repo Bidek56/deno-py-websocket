@@ -17,7 +17,8 @@ export { default as ReactDOMServer } from "https://dev.jspm.io/react-dom@16.13.1
 // export { default as ReactDOMServer } from "https://cdn.pika.dev/react-dom@16.13.1/server.js";
 
 export { makeJwt } from "https://deno.land/x/djwt@v0.9.0/create.ts";
-export { hash, compare } from "https://deno.land/x/bcrypt@v0.2.1/mod.ts";
+
+export { verify } from "https://deno.land/x/scrypt/mod.ts";
 
 export {
   validateJwt,

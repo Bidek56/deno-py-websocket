@@ -13,9 +13,8 @@ export const ScrollModal: React.FC<{setShowModal: Dispatcher<boolean>, path: str
       const response = await fetch(`/log`, {
         method: "POST",
         headers: {
-            "Content-Type": "application/json",
+            "Content-Type": "application/json"
         },
-        // @ts-ignore
         body: JSON.stringify({ path })
       })
 
@@ -46,6 +45,13 @@ export const ScrollModal: React.FC<{setShowModal: Dispatcher<boolean>, path: str
 ScrollModal.propTypes = {
   setShowModal: PropTypes.func.isRequired,
   path: PropTypes.string.isRequired
+}
+
+interface IMessage {
+  count: number;
+  log?: string;
+  completed: number;
+  type: string;
 }
 
 export const NewTask: React.FC = (): JSX.Element => {
@@ -95,15 +101,12 @@ export const NewTask: React.FC = (): JSX.Element => {
   }
  
   const handleLogClick = ( event: React.MouseEvent<HTMLButtonElement, MouseEvent> ) => {
-  // const handleLogClick = (log: string) => {
-    console.log("Log", log)
+    // console.log("Showing log for: ", log)
     setShowModal(true)
   }
 
- 	const onReceiveMessage = ({ data }: any) => {
-		const obj = JSON.parse(data);
-
-    // console.log(obj)
+ 	const onReceiveMessage = ({ data }: { data: string; }) => {
+		const obj: IMessage | null = JSON.parse(data);
 
     if (!obj)
       return
@@ -127,8 +130,7 @@ export const NewTask: React.FC = (): JSX.Element => {
 		try {
 			// ${window.location.host}
 
-      // @ts-ignore
-			const wsl = new WebSocket(`ws://localhost:6789`);
+			const wsl: WebSocket = new WebSocket(`ws://localhost:6789`);
 
 			// console.log("WS:", wsl)
 
