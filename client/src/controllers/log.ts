@@ -6,7 +6,14 @@ export const log = async (ctx: RouterContext) => {
 
     try {
         if (!ctx.request.hasBody) {
-            ctx.throw(Status.BadRequest, "Bad Request");
+            if (ctx.throw)
+                ctx.throw(Status.BadRequest, "Bad request");
+            else {
+                ctx.response.status = Status.OK;
+                ctx.response.body = { 'error': "Bad log request" };
+                ctx.response.type = "json";
+                return
+            }
         }
         const body = await ctx.request.body();
 
@@ -30,6 +37,9 @@ export const log = async (ctx: RouterContext) => {
             return;
         }
     } catch (error) {
-        ctx.throw(Status.InternalServerError, error);
+        if (ctx.throw)
+            ctx.throw(Status.InternalServerError, error);
+        else
+            console.error(error);            
     }
 }

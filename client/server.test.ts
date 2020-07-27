@@ -8,7 +8,7 @@ import {
   assertStrictEquals,
   assertThrows,
   assertThrowsAsync,
-} from "https://deno.land/std@0.58.0/testing/asserts.ts";
+} from "https://deno.land/std@0.62.0/testing/asserts.ts";
 
 import {
   Serve,
@@ -107,9 +107,7 @@ function createMockNext() {
   return async function next() {};
 }
 
-function setup<
-  S extends Record<string | number | symbol, any> = Record<string, any>,
->(
+function setup<S extends Record<string | number | symbol, any> = Record<string, any>,>(
   path = "/",
   method = "GET",
 ): {
@@ -241,5 +239,22 @@ Deno.test({
     assertEquals(context.response.status, Status.OK);
     assertEquals(context.response.type, "json");
     assertEquals(context.response.body, { error: "server-token not found" });
+  },
+});
+
+import log from "./src/routes/log.ts";
+
+Deno.test({
+  name: "/log",
+  async fn() {
+    const { app, context, next } = setup("/log", "POST");
+
+    const mw = log.routes();
+    await mw(context, next);
+    // console.log(context)
+
+    assertEquals(context.response.status, Status.OK);
+    assertEquals(context.response.type, "json");
+    assertEquals(context.response.body, { error: "Bad log request" });
   },
 });

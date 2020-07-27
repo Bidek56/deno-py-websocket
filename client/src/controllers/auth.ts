@@ -60,10 +60,10 @@ export async function logout(ctx: RouterContext) {
         }
 
         const body: any = await ctx.request.body();
-        const token = body?.value?.token;
+        const value: {token: string} | undefined = await body?.value
 
-        if (!token) {
-            ctx.throw(Status.UnprocessableEntity, "Wrong user name");
+        if (!value.token) {
+            ctx.throw(Status.UnprocessableEntity, "Token not found");
         } else {
             ctx.cookies.delete("server-token")
         }

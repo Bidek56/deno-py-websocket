@@ -18,6 +18,11 @@ $ deno run -c tsconfig.json --allow-net --allow-read server.tsx
 $ denon start
 ```
 
+# Bundle it
+```
+$ deno bundle -c ./tsconfig.json .\server.tsx > server.js
+```
+
 # MakeFile Script for Linux
 
 ```
@@ -38,7 +43,7 @@ deno run -c tsconfig.json --allow-net --allow-read server.tsx 2>&1 | tee -filePa
 # Test
 
 ```
-easy test set but can't do with jest T^T
+deno test -c .\tsconfig.json
 ```
 
 # Getting started
