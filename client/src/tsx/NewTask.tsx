@@ -54,7 +54,7 @@ interface IMessage {
   type: string;
 }
 
-export const NewTask: React.FC = (): JSX.Element => {
+export const NewTask: React.FC = (): React.ReactNode => {
 
   const [ws, setWs] = React.useState<any>(null);
 	const [completedCount, setCompletedCount] = React.useState<number>(0);

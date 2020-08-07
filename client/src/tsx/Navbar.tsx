@@ -1,6 +1,6 @@
 import {React, PropTypes} from '../deps.ts'
 
-const NavBar: React.FC<{ logout: () => void }> = ({ logout }): JSX.Element => {
+const NavBar: React.FC<{ logout: () => void }> = ({ logout }): React.ReactNode => {
 
     return (
         <nav className="navbar navbar-expand-lg navbar-light bg-light">

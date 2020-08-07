@@ -1,6 +1,6 @@
 import {React, PropTypes} from '../deps.ts'
 
-const Login: React.FC<{ setToken: (username: string | null) => void, }> = ({ setToken }): JSX.Element => {
+const Login: React.FC<{ setToken: (username: string | null) => void, }> = ({ setToken }): React.ReactNode => {
 
     const userRef = React.useRef<HTMLInputElement | null>(null);
     const passRef = React.useRef<HTMLInputElement | null>(null);
@@ -56,8 +56,8 @@ const Login: React.FC<{ setToken: (username: string | null) => void, }> = ({ set
                 <form id="loginForm" noValidate onSubmit={handleSignIn}>
                     <h3>Sign In</h3>
 
-                    <input type="text" id="login" className="fadeIn second" name="login" placeholder="login" ref={userRef} />
-                    <input type="text" id="password" className="fadeIn third" name="login" placeholder="password" ref={passRef}/>
+                    <input type="text" id="user" className="fadeIn second" name="user" placeholder="user name" ref={userRef} />
+                    <input type="text" id="password" className="fadeIn third" name="pass" placeholder="password" ref={passRef}/>
                     <input type="submit" className="fadeIn fourth" value="Log In" />
                     { error && <b style={{ background: 'red', color: 'white' }}>{error}</b> }
                 </form>

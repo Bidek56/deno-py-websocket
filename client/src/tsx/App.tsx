@@ -3,7 +3,7 @@ import { NewTask } from './NewTask.tsx'
 import NavBar from './NavBar.tsx'
 import Login from './Login.tsx'
 
-const App: React.FC = (): JSX.Element => {
+const App: React.FC = (): React.ReactNode => {
 
 	const [valueCount, setValueCount] = React.useState<number>(0);
 	const [userCount, setUserCount] = React.useState<number>(0);

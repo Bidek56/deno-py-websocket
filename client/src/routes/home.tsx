@@ -4,8 +4,6 @@ import { NewTask, ScrollModal } from '../tsx/NewTask.tsx'
 import NavBar from '../tsx/NavBar.tsx'
 import Login from '../tsx/Login.tsx'
 
-import authorize from "../middleware/authorize.ts";
-
 // Adding a route for js code to use i the browser
 const browserBundlePath = "/browser.js";
 
@@ -13,8 +11,6 @@ const browserBundlePath = "/browser.js";
 const js =
   `import React from "https://dev.jspm.io/react@16.13.1";
    import ReactDOM from "https://dev.jspm.io/react-dom@16.13.1";
-   import ReactCookie from 'https://dev.jspm.io/react-cookie';
-   import bcrypt from "https://dev.jspm.io/bcryptjs@2.4.3";
 
    const App = ${App};
    const NewTask = ${NewTask}

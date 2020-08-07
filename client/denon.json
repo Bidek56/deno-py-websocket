@@ -13,7 +13,8 @@
       "tsconfig": "tsconfig.json"
     },
     "test": {
-      "cmd": "deno test"
+      "cmd": "deno test",
+      "tsconfig": "tsconfig.json"
     }
   },
   "watcher": {
