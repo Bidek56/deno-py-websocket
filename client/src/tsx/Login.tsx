@@ -1,6 +1,8 @@
 import {React, PropTypes} from '../deps.ts'
 
-const Login: React.FC<{ setToken: (username: string | null) => void, }> = ({ setToken }): React.ReactNode => {
+type  LoginProps = { setToken: (username: string | null) => void, }
+
+const Login = ({ setToken }: LoginProps ) => {
 
     const userRef = React.useRef<HTMLInputElement | null>(null);
     const passRef = React.useRef<HTMLInputElement | null>(null);

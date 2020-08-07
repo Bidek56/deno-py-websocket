@@ -2,8 +2,9 @@
 import {React, PropTypes} from '../deps.ts'
 
 type Dispatcher<S> = React.Dispatch<React.SetStateAction<S>>;
+type ScrollProp = {setShowModal: Dispatcher<boolean>, path: string|null};
 
-export const ScrollModal: React.FC<{setShowModal: Dispatcher<boolean>, path: string|null }> = ({setShowModal, path }) => {
+export const ScrollModal = ({setShowModal, path }: ScrollProp) => {
 
   const [logContent, setLogContent] = React.useState<string|null>(null);
 
@@ -54,7 +55,7 @@ interface IMessage {
   type: string;
 }
 
-export const NewTask: React.FC = (): React.ReactNode => {
+export const NewTask = () => {
 
   const [ws, setWs] = React.useState<any>(null);
 	const [completedCount, setCompletedCount] = React.useState<number>(0);
