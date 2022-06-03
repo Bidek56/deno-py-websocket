@@ -1,6 +1,6 @@
-import { Status, RouterContext } from "../deps.ts";
+import { Status, Context } from "../deps.ts";
 
-export const log = async (ctx: RouterContext) => {
+export const log = async (ctx: Context) => {
 
     const decoder = new TextDecoder("utf-8")
 

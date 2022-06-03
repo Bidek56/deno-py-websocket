@@ -1,9 +1,9 @@
-import { Status, RouterContext, validateJwt, Jose, Payload } from "../deps.ts";
+import { Status, Context, verify, Header, Payload } from "../deps.ts";
 
-type JwtObject = { header: Jose; payload?: Payload; signature: string }
+type JwtObject = { header: Header; payload?: Payload; signature: string }
 
-export default async (ctx: RouterContext, next: () => Promise<void>) => {
-  const serverToken = ctx?.cookies?.get("server-token")
+export default async (ctx: Context, next: () => Promise<unknown>) => {
+  const serverToken = await ctx?.cookies?.get("server-token")
 
   if (!serverToken) {
     if (ctx.throw)
@@ -14,9 +14,13 @@ export default async (ctx: RouterContext, next: () => Promise<void>) => {
     }
   } else {
     try {
-      const key: string = Deno.env.get("TOKEN_SECRET") || "H3EgqdTJ1SqtOekMQXxwufbo2iPpu89O";
+      const key = await crypto.subtle.generateKey(
+        { name: "HMAC", hash: "SHA-512" },
+        true,
+        ["sign", "verify"],
+      );
 
-      const jwtObject: JwtObject|null = await validateJwt(serverToken, key);
+      const jwtObject: Payload|null = await verify(serverToken, key);
 
       // console.log("jwtObject:",  jwtObject)
       // ctx.request.user = jwtObject?.payload;

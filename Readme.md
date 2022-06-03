@@ -1,5 +1,5 @@
 # deno-py-websocket
-Deno Preact websocket client with Python server
+Deno React websocket client with Python server
 
 * Deno code is based on: https://aralroca.com/blog/learn-deno-chat-app
 * Python code is based on: https://websockets.readthedocs.io/en/stable/intro.html

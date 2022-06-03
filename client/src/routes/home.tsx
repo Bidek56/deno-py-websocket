@@ -8,17 +8,17 @@ import Login from '../tsx/Login.tsx'
 const browserBundlePath = "/browser.js";
 
 // js for client side React - the React components are stored as client side consts
-const js =
-  `import React from "https://dev.jspm.io/react@16.13.1";
-   import ReactDOM from "https://dev.jspm.io/react-dom@16.13.1";
+const js = 
+  `import React from "https://cdn.skypack.dev/react";
+   import ReactDOM from "https://cdn.skypack.dev/react-dom/server";
 
    const App = ${App};
    const NewTask = ${NewTask}
    const NavBar = ${NavBar}
    const Login = ${Login}
    const ScrollModal = ${ScrollModal}
-  
-   ReactDOM.render(React.createElement(App), document.getElementById('react-app'));`;
+
+   ReactDOM.hydrate(React.createElement(App), document.getElementById('react-app'));`;
 
 // the js code is loaded from a script tag
 const html =
@@ -27,7 +27,7 @@ const html =
       <meta charset="UTF-8" />
       <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       <link rel="shortcut icon" href="/static/favicon.ico" type="image/x-icon" data-react-helmet="true">
-      <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/css/bootstrap.min.css" integrity="sha384-r4NyP46KrjDleawBgD5tp8Y7UzmLA05oM1iAEQ17CSuDqnUK2+k9luXQOfXJCJ4I" crossorigin="anonymous">
+      <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
       <link rel="stylesheet" href="/static/style.css" />
       <title>Deno ETL</title>
       <script type="module" src="${browserBundlePath}"></script>
@@ -35,9 +35,8 @@ const html =
     <body>
       <div id="react-app">${ReactDOMServer.renderToString(<App />)}</div>
       <!-- Optional JavaScript -->
-      <!-- Popper.js first, then Bootstrap JS -->
-      <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
-      <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/js/bootstrap.min.js" integrity="sha384-oesi62hOLfzrys4LxRF63OJCXdXDipiYWBnvTl9Y9/TRlw5xlKIEHpNyvvDShgf/" crossorigin="anonymous"></script>
+      <!-- JavaScript Bundle with Popper -->
+      <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2" crossorigin="anonymous"></script>
     </body>
   </html>`;
 

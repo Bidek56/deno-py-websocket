@@ -1,8 +1,8 @@
-import { Status, verify, makeJwt, Jose, Payload, RouterContext, Body } from "../deps.ts";
+import { Status, verify, create, Header, Payload, Context } from "../deps.ts";
 
 type LoginBody = Promise<any> & { user?: string, pass?: string }
 
-export const login = async(ctx: RouterContext) => {
+export const login = async(ctx: Context) => {
 
     try {
 
@@ -10,7 +10,7 @@ export const login = async(ctx: RouterContext) => {
             ctx.throw(Status.BadRequest, "Bad Request");
         }
 
-        const body: Body = await ctx.request.body();
+        const body = await ctx.request.body();
         
         let value: LoginBody | null = null;
         if (body?.type === 'json') {
@@ -21,17 +21,24 @@ export const login = async(ctx: RouterContext) => {
 
         const user = await value?.user;
 
+        const key = await crypto.subtle.generateKey(
+            { name: "HMAC", hash: "SHA-512" },
+            true,
+            ["sign", "verify"],
+          );
+
+        console.log("Key:", key);
+
         if (!value || !user) {
             ctx.throw(Status.UnprocessableEntity, "Wrong user name");
-        } else if (value?.pass && await verify(value?.pass, "c2NyeXB0AA4AAAAIAAAAAQVR+9n5QXXXutDKrHp70j9oQA200hKYVM6RDl2UrgTSLfl5DBkEtx6r73se5iAxpQ7Eh89S5Q6nsd7O1rGdZqBcXQIQTcTFnJlmCpsx5qUp")) {
-            const header: Jose = { alg: "HS256", typ: "JWT" };
+        } else if (value?.pass && await verify(value?.pass, key)) {
+            const header: Header = { alg: "HS256", typ: "JWT" };
             const payload: Payload = {
                 id: user,
                 name: user
             };
-            const key: string = Deno.env.get("TOKEN_SECRET") || "H3EgqdTJ1SqtOekMQXxwufbo2iPpu89O";
 
-            const token = makeJwt({ header, payload, key });
+            const token = await create(header, payload, key);
 
             ctx.cookies.set("server-token", token, { httpOnly: true, maxAge: 36000 });
 
@@ -51,7 +58,7 @@ export const login = async(ctx: RouterContext) => {
     }
 }
 
-export async function logout(ctx: RouterContext) {
+export async function logout(ctx: Context) {
 
     try {
 
@@ -73,7 +80,7 @@ export async function logout(ctx: RouterContext) {
     }
 }
 
-export const token = async (ctx: RouterContext) => {
+export const token = async (ctx: Context) => {
 
     try {
         ctx.response.status = Status.OK;
