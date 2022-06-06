@@ -17,7 +17,9 @@ export const log = async (ctx: Context) => {
         }
         const body = await ctx.request.body();
 
-        let value: object | null = null;
+        let value: {
+            [key: string]: URL | string,
+           } | null = null;
 
         if (body.type === "json") {
             value = await body?.value;

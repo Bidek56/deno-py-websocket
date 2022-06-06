@@ -2,7 +2,7 @@
 import {React, PropTypes} from '../deps.ts'
 
 type Dispatcher<S> = React.Dispatch<React.SetStateAction<S>>;
-type ScrollProp = {setShowModal: Dispatcher<boolean>, path: string|null};
+type ScrollProp = {setShowModal: Dispatcher<boolean>, path: string|undefined};
 
 export const ScrollModal = ({setShowModal, path }: ScrollProp) => {
 
@@ -59,7 +59,7 @@ export const NewTask = () => {
 
   const [ws, setWs] = React.useState<any>(null);
 	const [completedCount, setCompletedCount] = React.useState<number>(0);
-  const [log, setLog] = React.useState<string | null>(null);
+  const [log, setLog] = React.useState<string | undefined>(undefined);
 
   const [showModal, setShowModal] = React.useState<boolean>(false);
 	const [userCount, setUserCount] = React.useState<number>(0);
@@ -97,7 +97,7 @@ export const NewTask = () => {
   const handleSubmit = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     // console.log('Submitted: ' + selectedCar + ":" + selectedColor + ":" + selectedModel);
 
-    setLog(null);
+    setLog(undefined);
     ws?.send(JSON.stringify({ action: "doTask", car: selectedCar, model: selectedModel, color: selectedColor }));
   }
  

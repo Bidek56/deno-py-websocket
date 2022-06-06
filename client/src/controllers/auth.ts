@@ -69,7 +69,7 @@ export async function logout(ctx: Context) {
         const body: any = await ctx.request.body();
         const value: {token: string} | undefined = await body?.value
 
-        if (!value.token) {
+        if (!value?.token) {
             ctx.throw(Status.UnprocessableEntity, "Token not found");
         } else {
             ctx.cookies.delete("server-token")

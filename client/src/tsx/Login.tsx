@@ -9,6 +9,7 @@ const Login = ({ setToken }: LoginProps ) => {
     const [error, setError] = React.useState<string | null>(null)
 
     const getUser = async () => {
+
         const response = await fetch('/auth/login', {
             method: 'POST',
             headers: {
@@ -32,6 +33,7 @@ const Login = ({ setToken }: LoginProps ) => {
     }
 
     const handleSignIn = async (e: React.FormEvent<HTMLFormElement>) => {
+
         e.preventDefault();
 
         if (!userRef?.current?.value) {

@@ -17,7 +17,7 @@ $tasks.Add('mon',@{
 $tasks.Add('dev',@{
         description="Runs dev";
         script = {
-            deno run -c tsconfig.json --allow-net --allow-read server.tsx
+            deno run -c tsconfig.json --allow-net --allow-read server.ts
         }
     })
 

@@ -1,8 +1,8 @@
 export {Application, Router, Context, Status, send, isHttpError} from 'https://deno.land/x/oak/mod.ts';
 
-export { default as React } from "https://dev.jspm.io/react@18.1.0";
-export { default as PropTypes } from 'https://dev.jspm.io/prop-types@15.8.1';
-export { default as ReactDOMServer } from "https://dev.jspm.io/react-dom@18.1.0/server";
+export { default as React } from "https://esm.sh/react@18";
+export { default as PropTypes } from 'https://esm.sh/prop-types';
+export { default as ReactDOMServer } from "https://esm.sh/react-dom@18/server.browser";
 
 export {
   create,

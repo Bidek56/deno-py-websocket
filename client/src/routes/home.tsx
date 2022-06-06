@@ -9,8 +9,8 @@ const browserBundlePath = "/browser.js";
 
 // js for client side React - the React components are stored as client side consts
 const js = 
-  `import React from "https://cdn.skypack.dev/react";
-   import ReactDOM from "https://cdn.skypack.dev/react-dom/server";
+  `import React from "https://esm.sh/react@18";
+   import {hydrateRoot} from "https://esm.sh/react-dom@18/client";
 
    const App = ${App};
    const NewTask = ${NewTask}
@@ -18,7 +18,10 @@ const js =
    const Login = ${Login}
    const ScrollModal = ${ScrollModal}
 
-   ReactDOM.hydrate(React.createElement(App), document.getElementById('react-app'));`;
+   const root = document.getElementById('react-app');
+
+   hydrateRoot(root, React.createElement(App));
+   `;
 
 // the js code is loaded from a script tag
 const html =

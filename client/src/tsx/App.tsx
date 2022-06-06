@@ -7,7 +7,7 @@ const App = () => {
 
 	const [valueCount, setValueCount] = React.useState<number>(0);
 	const [userCount, setUserCount] = React.useState<number>(0);
-    const [token, setToken] = React.useState<string | null>(null)
+    const [token, setToken] = React.useState<string | null>(null);
 
     const logout = async () => {
 
@@ -28,10 +28,9 @@ const App = () => {
     }
 
     const readToken = async () => {
+        
         try {
             const response = await fetch('/auth/token');
-
-            // console.log("Token res:", response)
 
             if (response.ok) {
                 const body = await response.json()
@@ -62,6 +61,7 @@ const App = () => {
             }
         </React.Fragment>
    )
+
 }
 
 export default App
