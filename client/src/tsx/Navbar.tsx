@@ -8,7 +8,7 @@ const NavBar = ({ logout }: { logout: () => void } ) => {
                 <li className="nav-item active">
                     <a className="nav-link" href="/">Home</a>
                 </li>
-                <li className="nav-item" style={{float:'right'}}><a className="nav-link" href="/" onClick={logout}>Logout</a></li>
+                <li className="nav-item" style={{float:'right'}}><a className="nav-link" onClick={logout}>Logout</a></li>
             </ul>
         </nav>
     );

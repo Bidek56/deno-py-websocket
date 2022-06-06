@@ -8,6 +8,14 @@ import home from "./src/routes/home.tsx";
 import auth from "./src/routes/auth.ts";
 import log from "./src/routes/log.ts";
 
+
+// use the native Web Crypto APIto generate a secure CryptoKey.
+const key = await crypto.subtle.generateKey(
+  { name: "HMAC", hash: "SHA-512" },
+  true,
+  ["sign", "verify"],
+);
+
 const app = new Application();
 
 app.use(error);
@@ -29,4 +37,4 @@ if (import.meta.main) {
   await app.listen({ port: 8000 });
 }
 
-export { app };
+export { app, key };

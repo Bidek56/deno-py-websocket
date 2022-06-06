@@ -7,9 +7,10 @@ export { default as ReactDOMServer } from "https://esm.sh/react-dom@18/server.br
 export {
   create,
   verify,
+  getNumericDate
 } from "https://deno.land/x/djwt@v2.5/mod.ts";
 
 export type {
   Header,
   Payload
-} from "https://deno.land/x/djwt@v2.5/mod.ts";
+} from "https://deno.land/x/djwt@v2.5/mod.ts"

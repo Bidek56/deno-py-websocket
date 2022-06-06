@@ -5,13 +5,12 @@ import Login from './Login.tsx'
 
 const App = () => {
 
-	const [valueCount, setValueCount] = React.useState<number>(0);
-	const [userCount, setUserCount] = React.useState<number>(0);
     const [token, setToken] = React.useState<string | null>(null);
 
     const logout = async () => {
 
         try {
+
             const response = await fetch('/auth/logout', {
                 method: 'POST',
                 headers: {
@@ -19,7 +18,7 @@ const App = () => {
                 },
                 body: JSON.stringify({ token })
             });
-            // console.log("Logout res:", response)
+            console.log("Logout res:", response)
 
             setToken(null)
         } catch (e) {
@@ -48,6 +47,8 @@ const App = () => {
     React.useEffect(() => {
         readToken();
     }, []);
+
+    console.log("Tok:", token);
 
     return (
         <React.Fragment>

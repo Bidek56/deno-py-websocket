@@ -1,4 +1,6 @@
-import { Status, verify, create, Header, Payload, Context } from "../deps.ts";
+import { Status, create, getNumericDate, Header, Payload, Context } from "../deps.ts";
+import { verify } from "https://deno.land/x/scrypt/mod.ts";
+import { key } from "../../server.ts"
 
 type LoginBody = Promise<any> & { user?: string, pass?: string }
 
@@ -21,21 +23,16 @@ export const login = async(ctx: Context) => {
 
         const user = await value?.user;
 
-        const key = await crypto.subtle.generateKey(
-            { name: "HMAC", hash: "SHA-512" },
-            true,
-            ["sign", "verify"],
-          );
-
-        console.log("Key:", key);
-
         if (!value || !user) {
             ctx.throw(Status.UnprocessableEntity, "Wrong user name");
-        } else if (value?.pass && await verify(value?.pass, key)) {
-            const header: Header = { alg: "HS256", typ: "JWT" };
+
+        // default pass is admin
+        } else if (value?.pass && await verify(value?.pass, "c2NyeXB0AA4AAAAIAAAAAbd63Dy2cJ9Vh94KeJQCBGNjAKA+XpYYjiILNLiyN9MjurhuMClp1lf5XNHSbCCOToKySaocRQA0s/ZjZllJ+f/VI9WkxCrTarwRehJcrEMx")) {
+            const header: Header = { alg: "HS512", typ: "JWT" };
             const payload: Payload = {
                 id: user,
-                name: user
+                name: user,
+                exp: getNumericDate(60)
             };
 
             const token = await create(header, payload, key);
@@ -58,7 +55,7 @@ export const login = async(ctx: Context) => {
     }
 }
 
-export async function logout(ctx: Context) {
+export const logout = async(ctx: Context) => {
 
     try {
 
@@ -68,6 +65,8 @@ export async function logout(ctx: Context) {
 
         const body: any = await ctx.request.body();
         const value: {token: string} | undefined = await body?.value
+
+        console.log("Logout val:", value);
 
         if (!value?.token) {
             ctx.throw(Status.UnprocessableEntity, "Token not found");
@@ -85,8 +84,8 @@ export const token = async (ctx: Context) => {
     try {
         ctx.response.status = Status.OK;
         ctx.response.type = "json";
-        if (ctx?.cookies?.get("server-token")) {            
-            ctx.response.body = { 'token': ctx.cookies.get("server-token") };            
+        if (await ctx?.cookies?.get("server-token")) {            
+            ctx.response.body = { 'token': await ctx.cookies.get("server-token") };            
         } else {
             ctx.response.body = { 'error': 'server-token not found' };
         }

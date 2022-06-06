@@ -1,4 +1,5 @@
 import { Status, Context, verify, Header, Payload } from "../deps.ts";
+import { key } from "../../server.ts"
 
 type JwtObject = { header: Header; payload?: Payload; signature: string }
 
@@ -14,12 +15,6 @@ export default async (ctx: Context, next: () => Promise<unknown>) => {
     }
   } else {
     try {
-      const key = await crypto.subtle.generateKey(
-        { name: "HMAC", hash: "SHA-512" },
-        true,
-        ["sign", "verify"],
-      );
-
       const jwtObject: Payload|null = await verify(serverToken, key);
 
       // console.log("jwtObject:",  jwtObject)
