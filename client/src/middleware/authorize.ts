@@ -22,6 +22,7 @@ export default async (ctx: Context, next: () => Promise<unknown>) => {
 
       await next();
     } catch (err) {
+      console.error("Authorize error:", err);
       if (ctx.throw)
         ctx.throw(Status.Unauthorized);
       else

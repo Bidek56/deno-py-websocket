@@ -9,7 +9,7 @@ export default async (ctx: Context, next: () => Promise<unknown>) => {
     const status = ctx.response.status || Status.NotFound;
 
     if (status === Status.NotFound) {
-      ctx.throw(Status.NotFound, "Not Found!");
+      ctx.throw(Status.NotFound, "Route not found!");
     }
   } catch (err) {
     if (isHttpError(err)) {

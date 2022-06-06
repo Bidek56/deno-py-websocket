@@ -18,16 +18,14 @@ const Login = ({ setToken }: LoginProps ) => {
             body: JSON.stringify({ user: userRef?.current?.value, pass: passRef?.current?.value })
         })
 
-        // console.log("Res OK:", response.ok)
-
         if (response.ok) {
             const body = await response.json()
             
-            // console.log("Res:", body)
-            // console.log("Token:", body?.data?.accessToken)
-
             if (body?.data?.accessToken) {
                 setToken(body?.data?.accessToken)
+            } else if (body?.status === "error" && body?.message) {
+                setError(body?.message);
+                setToken(null);
             }
         }       
     }
@@ -63,7 +61,7 @@ const Login = ({ setToken }: LoginProps ) => {
                     <input type="text" id="user" className="fadeIn second" name="user" placeholder="user name" ref={userRef} />
                     <input type="text" id="password" className="fadeIn third" name="pass" placeholder="password" ref={passRef}/>
                     <input type="submit" className="fadeIn fourth" value="Log In" />
-                    { error && <b style={{ background: 'red', color: 'white' }}>{error}</b> }
+                    { error && <div><br/><b style={{ background: 'red', color: 'white' }}>{error}</b></div> }
                 </form>
             </div>
         </div>

@@ -80,7 +80,7 @@ export const NewTask = () => {
   const [selectedModel, setSelectedModel] = React.useState<string>(modelNames[0])
 
   const onSelectChange = (event: React.ChangeEvent<{ name?: string; value: unknown }>) => {
-    console.log(event.target.value)
+    // console.log(event.target.value)
     setSelectedCar(event.target.value as string)
   }
 

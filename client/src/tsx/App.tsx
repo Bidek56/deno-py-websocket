@@ -18,7 +18,6 @@ const App = () => {
                 },
                 body: JSON.stringify({ token })
             });
-            console.log("Logout res:", response)
 
             setToken(null)
         } catch (e) {
@@ -47,8 +46,6 @@ const App = () => {
     React.useEffect(() => {
         readToken();
     }, []);
-
-    console.log("Tok:", token);
 
     return (
         <React.Fragment>

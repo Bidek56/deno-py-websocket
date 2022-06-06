@@ -32,26 +32,31 @@ export const login = async(ctx: Context) => {
             const payload: Payload = {
                 id: user,
                 name: user,
-                exp: getNumericDate(60)
+                exp: getNumericDate(36000)
             };
 
             const token = await create(header, payload, key);
 
             ctx.cookies.set("server-token", token, { httpOnly: true, maxAge: 36000 });
 
-            ctx.response.status = Status.OK;
-            ctx.response.type = "json";
             ctx.response.body = {
                 status: "success",
                 message: `Logged in with ${value?.user}`,
                 data: { accessToken: token },
             };
         } else {
-            ctx.throw(Status.Unauthorized, "Wrong Password!");
+            ctx.response.body = {
+                status: "error",
+                message: `Wrong password for ${value?.user}`
+            };
         }
+
+        ctx.response.status = Status.OK;
+        ctx.response.type = "json";
 
     } catch (error) {
 		console.log("catch:", error);
+        ctx.throw(Status.Unauthorized, "Wrong Password!");
     }
 }
 
@@ -64,15 +69,21 @@ export const logout = async(ctx: Context) => {
         }
 
         const body: any = await ctx.request.body();
-        const value: {token: string} | undefined = await body?.value
 
-        console.log("Logout val:", value);
+        const value: {token: string} | undefined = await body?.value
 
         if (!value?.token) {
             ctx.throw(Status.UnprocessableEntity, "Token not found");
         } else {
             ctx.cookies.delete("server-token")
         }
+
+        ctx.response.status = Status.OK;
+        ctx.response.type = "json";
+        ctx.response.body = {
+            status: "success",
+            message: `Logged out`
+        };
 
     } catch (error) {
         console.log("catch:", error);
