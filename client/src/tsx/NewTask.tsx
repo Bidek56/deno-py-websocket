@@ -19,11 +19,13 @@ export const ScrollModal = ({setShowModal, path }: ScrollProp) => {
         body: JSON.stringify({ path })
       })
 
-      // console.log("Res:", response)
-
       if (response.ok) {
-        const body = await response.json()        
-        setLogContent(body?.content)
+        const body = await response.json()
+        if (body?.error) {
+          setLogContent(body?.error);
+        } else if (body?.content) {
+          setLogContent(body?.content);
+        }
       }
     }
 

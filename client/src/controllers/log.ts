@@ -1,5 +1,5 @@
 import { Status, Context } from "../deps.ts";
-import {existsSync} from "https://deno.land/std/fs/mod.ts";
+import { existsSync } from "https://deno.land/std/fs/mod.ts";
 
 export const log = async (ctx: Context) => {
 
@@ -22,33 +22,28 @@ export const log = async (ctx: Context) => {
             [key: string]: URL | string,
            } | null = null;
 
+        ctx.response.status = Status.OK;
+        ctx.response.type = "json";
+
         if (body.type === "json") {
             value = await body?.value;
         }
 
-        if (value && 'path' in value) {
+        if (existsSync(value?.path?.toString()) ) {
 
-            console.log("Deno.readFileSync:", value["path"]);
+            const content = decoder.decode(Deno.readFileSync(value["path"]));
 
-            // const res = await Deno.stat(value["path"]);
-            // console.log(res);
-
-            // if (existsSync(new URL(value["path"])) ) {
-
-            //     const content = decoder.decode(Deno.readFileSync(value["path"]));
-
-            //     // ctx.assert(!content, Status.BadRequest);
-            //     ctx.response.body = { 'content': content };
-            // } else {
-            //     ctx.response.body = { 'error': "log does not exists"};
-            // }
-
-            ctx.response.status = Status.OK;
-            ctx.response.type = "json";
-            return;
+            if (content) {
+                ctx.response.body = { 'content': content };
+            } else {
+                ctx.response.body = { 'error': "log content is empty"};
+            }
+        } else {
+            ctx.response.body = { 'error': "log does not exists"};
         }
+
     } catch (error) {
-        console.error("Err:", error);
+        console.error("Log error:", error);
         if (ctx.throw)
             ctx.throw(Status.InternalServerError, error);
         else
