@@ -8,7 +8,7 @@ export {
   create,
   verify,
   getNumericDate
-} from "https://deno.land/x/djwt@v2.5/mod.ts";
+} from "https://deno.land/x/djwt@v2.7/mod.ts";
 
 export type {
   Header,
